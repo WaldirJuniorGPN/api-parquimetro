@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/parquimetro
+    username: user
+    password: admin
+
+  jpa:
+    hibernate:
+      format_sql: true
