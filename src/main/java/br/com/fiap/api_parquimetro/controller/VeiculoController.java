@@ -1,8 +1,8 @@
 package br.com.fiap.api_parquimetro.controller;
 
-import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
-import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
-import br.com.fiap.api_parquimetro.service.AgenteService;
+import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
+import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
+import br.com.fiap.api_parquimetro.service.VeiculoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,32 +12,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RequestMapping("/agente")
+@RequestMapping("/veiculo")
 @RestController
 @RequiredArgsConstructor
-public class AgenteController {
+public class VeiculoController {
 
-    private final AgenteService service;
+    private final VeiculoService service;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<AgenteResponseDto> cadastrar(@Valid @RequestBody AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<VeiculoResponseDto> cadastrar(@Valid @RequestBody VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         return this.service.cadastrar(dto, uriComponentsBuilder);
     }
 
     @GetMapping
-    public ResponseEntity<Page<AgenteResponseDto>> buscarTodos(Pageable pageable) {
+    public ResponseEntity<Page<VeiculoResponseDto>> buscarTodos(Pageable pageable) {
         return this.service.buscarTodos(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AgenteResponseDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<VeiculoResponseDto> buscarPorId(@PathVariable Long id) {
         return this.service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<AgenteResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody AgenteRequestDto dto) {
+    public ResponseEntity<VeiculoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody VeiculoRequestDto dto) {
         return this.service.atualizar(id, dto);
     }
 
