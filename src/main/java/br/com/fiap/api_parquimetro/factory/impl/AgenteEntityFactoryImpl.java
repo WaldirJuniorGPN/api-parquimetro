@@ -1,12 +1,15 @@
 package br.com.fiap.api_parquimetro.factory.impl;
 
-import br.com.fiap.api_parquimetro.factory.AgenteFactory;
+import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Agente;
 import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AgenteFactoryImpl implements AgenteFactory {
+@Qualifier("agenteFactory")
+public class AgenteEntityFactoryImpl implements EntityFactory<Agente, AgenteRequestDto> {
+
     @Override
     public Agente criar(AgenteRequestDto dto) {
         var agente = new Agente();

@@ -2,7 +2,7 @@ package br.com.fiap.api_parquimetro.service.impl;
 
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
-import br.com.fiap.api_parquimetro.factory.AgenteFactory;
+import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Agente;
 import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AgenteServiceImpl implements AgenteService {
 
     private final AgenteRepository repository;
-    private final AgenteFactory factory;
+    private final EntityFactory<Agente, AgenteRequestDto> factory;
 
     @Override
     public ResponseEntity<AgenteResponseDto> cadastrar(AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {

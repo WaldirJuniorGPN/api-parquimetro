@@ -1,17 +1,19 @@
 package br.com.fiap.api_parquimetro.factory.impl;
 
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
-import br.com.fiap.api_parquimetro.factory.VeiculoFactory;
+import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Motorista;
 import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
+@Qualifier("veiculoFactory")
 @RequiredArgsConstructor
-public class VeiculoFactoryImpl implements VeiculoFactory {
+public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequestDto> {
 
     private final MotoristaRepository repository;
 

@@ -2,7 +2,8 @@ package br.com.fiap.api_parquimetro.service.impl;
 
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
-import br.com.fiap.api_parquimetro.factory.MotoristaFactory;
+import br.com.fiap.api_parquimetro.factory.EntityFactory;
+import br.com.fiap.api_parquimetro.factory.impl.MotoristaFactoryImpl;
 import br.com.fiap.api_parquimetro.model.Motorista;
 import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
@@ -20,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class MotoristaServiceImpl implements MotoristaService {
 
     private final MotoristaRepository repository;
-    private final MotoristaFactory factory;
+    private final EntityFactory<Motorista, MotoristaRequestDto> factory;
 
     @Override
     public ResponseEntity<MotoristaResponseDto> cadastrar(MotoristaRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {

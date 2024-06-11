@@ -2,7 +2,7 @@ package br.com.fiap.api_parquimetro.service.impl;
 
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
-import br.com.fiap.api_parquimetro.factory.VeiculoFactory;
+import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class VeiculoServiceImpl implements VeiculoService {
 
     private final VeiculoRepository repository;
-    private final VeiculoFactory factory;
+    private final EntityFactory<Veiculo, VeiculoRequestDto> factory;
 
     @Override
     public ResponseEntity<VeiculoResponseDto> cadastrar(VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
