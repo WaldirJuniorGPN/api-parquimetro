@@ -102,9 +102,6 @@ sistema-de-parquimetros/
 5. Abra um Pull Request.
 
 
-## Contato
-
-Para mais informações, entre em contato pelo email: [waldirjunior.gpn@gmail.com](mailto:waldirjunior.gpn@gmail.com).
 
 ---
 
