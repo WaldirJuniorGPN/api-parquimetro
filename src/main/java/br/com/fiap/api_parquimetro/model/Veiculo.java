@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "veiculos")
@@ -19,6 +20,8 @@ public class Veiculo extends EntidadeBase {
     private String cor;
     private LocalDateTime horaDaEntrada;
     private LocalDateTime horaDaSaida;
+    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transacao> transacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "motorista_id")

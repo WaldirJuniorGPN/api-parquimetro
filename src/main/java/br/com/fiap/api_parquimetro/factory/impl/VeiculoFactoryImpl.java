@@ -6,14 +6,18 @@ import br.com.fiap.api_parquimetro.model.Motorista;
 import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
+import br.com.fiap.api_parquimetro.repository.VeiculoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
 public class VeiculoFactoryImpl implements VeiculoFactory {
 
-    private final MotoristaRepository repository;
+    private final VeiculoRepository repository;
+    private final MotoristaRepository motoristaRepository;
 
     @Override
     public Veiculo criar(VeiculoRequestDto dto) {
@@ -40,7 +44,14 @@ public class VeiculoFactoryImpl implements VeiculoFactory {
         }
     }
 
+    public void atualizarHoraSaida(Long id, LocalDateTime horaSaida){
+        Veiculo veiculo = this.repository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException("Veiculo não encontrado"));
+        veiculo.setHoraDaSaida(horaSaida);
+
+    }
     private Motorista buscarMotoristaNoBanco(Long id) {
-        return this.repository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException("Motorista não encontrado"));
+        return this.motoristaRepository
+                   .findByIdAndAtivoTrue(id)
+                   .orElseThrow(() -> new ControllerNotFoundException("Motorista não encontrado"));
     }
 }

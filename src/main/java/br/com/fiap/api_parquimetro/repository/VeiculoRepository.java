@@ -12,4 +12,6 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     Optional<Page<Veiculo>> findAllByAtivoTrue(Pageable pageable);
 
     Optional<Veiculo> findByIdAndAtivoTrue(Long id);
+
+    Optional<Veiculo> findByPlacaDoVeiculoIgnoreCaseAndHoraDaSaidaIsNull(String placaDoVeiculo);
 }
