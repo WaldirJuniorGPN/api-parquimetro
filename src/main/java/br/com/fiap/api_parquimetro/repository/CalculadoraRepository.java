@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CalculadoraRepository extends JpaRepository<Calculadora, Long> {
 
-    Optional<Page<Calculadora>> findAllByAtivoTrue(Pageable pageable);
-
     Optional<Calculadora> findByIdAndAtivoTrue(Long id);
+
+    Optional<Page<Calculadora>> findAllByAtivoTrue(Pageable pageable);
 }

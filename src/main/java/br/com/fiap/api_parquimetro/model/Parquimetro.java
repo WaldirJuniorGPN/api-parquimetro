@@ -1,9 +1,6 @@
 package br.com.fiap.api_parquimetro.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -18,4 +15,8 @@ public class Parquimetro extends EntidadeBase{
     private String localizacao;
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "calculadora_id")
+    private Calculadora calculadora;
 }

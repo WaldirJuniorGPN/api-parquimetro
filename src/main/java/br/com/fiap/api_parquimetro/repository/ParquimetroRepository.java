@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ParquimetroRepository extends JpaRepository<Parquimetro, Long> {
 
-    Optional<Page<Parquimetro>> findAllByAtivoTrue(Pageable pageable);
-
     Optional<Parquimetro> findByIdAndAtivoTrue(Long id);
+
+    Optional<Page<Parquimetro>> findAllByAtivoTrue(Pageable pageable);
 }

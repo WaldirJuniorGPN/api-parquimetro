@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
 
-    Optional<Page<Veiculo>> findAllByAtivoTrue(Pageable pageable);
-
     Optional<Veiculo> findByIdAndAtivoTrue(Long id);
+
+    Optional<Page<Veiculo>> findAllByAtivoTrue(Pageable pageable);
 }

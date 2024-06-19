@@ -44,7 +44,7 @@ public class CalculadoraServiceImpl implements CalculadoraService {
     }
 
     @Override
-    public ResponseEntity<CalculadoraResponseDto> atualizar(Long id, CalculadoraRequestDto dto) {
+    public ResponseEntity<CalculadoraResponseDto> atualizar(Long id, CalculadoraRequestDto dto) {   
         var calculadora = this.buscarNoBanco(id);
         this.factory.atualizar(calculadora, dto);
         this.repository.save(calculadora);
