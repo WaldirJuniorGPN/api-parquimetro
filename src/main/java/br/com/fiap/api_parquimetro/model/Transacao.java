@@ -1,10 +1,7 @@
 package br.com.fiap.api_parquimetro.model;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,14 +10,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode(callSuper = true)
 public class Transacao extends EntidadeBase {
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parquimetro_id")
     private Parquimetro parquimetro;
 

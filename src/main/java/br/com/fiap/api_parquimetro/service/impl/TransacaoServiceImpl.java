@@ -43,10 +43,13 @@ public class TransacaoServiceImpl implements TransacaoService {
         veiculo.setHoraDaEntrada(LocalDateTime.now());
         parquimetro.setStatus(Status.OCUPADO);
         transacao.setVeiculo(veiculo);
+        transacao.setParquimetro(parquimetro);
 
         this.transacaoRepository.save(transacao);
         this.veiculoRepository.save(veiculo);
         this.parquimetroRepository.save(parquimetro);
+
+        System.out.println(transacao);
 
         log.debug("Entrada registrada para o veículo ID: {}", dto.veiculoId());
         return ResponseEntity.ok(new TransacaoIniciadaResponseDto(transacao));
@@ -55,17 +58,21 @@ public class TransacaoServiceImpl implements TransacaoService {
     @Override
     public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(Long id) {
         var transacao = this.buscarTransacao(id);
+        System.out.println(transacao);
         var veiculo = transacao.getVeiculo();
         var calculadora = transacao.getParquimetro().getCalculadora();
         var parquimetro = transacao.getParquimetro();
         parquimetro.setStatus(Status.LIVRE);
+        parquimetro.setCalculadora(calculadora);
         veiculo.setHoraDaSaida(LocalDateTime.now());
 
-        var ducacao = Duration.between(veiculo.getHoraDaEntrada(), veiculo.getHoraDaSaida());
-        var valorPago = this.calcularValor(ducacao, calculadora);
+        var duracao = Duration.between(veiculo.getHoraDaEntrada(), veiculo.getHoraDaSaida());
+        var valorPago = this.calcularValor(duracao, calculadora);
 
         transacao.setValorPago(valorPago);
         transacao.setPagamentoPendente(false);
+        transacao.setParquimetro(parquimetro);
+        transacao.setValorPago(valorPago);
 
         this.pagamentoService.processar();
 
@@ -78,7 +85,7 @@ public class TransacaoServiceImpl implements TransacaoService {
 
     @Override
     public ResponseEntity<Page<TransacaoPagamentoPendenteResponseDto>> buscarTransacoesPendentesDePagamento(Pageable pageable) {
-        var page = this.transacaoRepository.findAllByAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException)
+        var page = this.transacaoRepository.findAllByPagamentoPendenteTrueAndAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException)
                 .map(TransacaoPagamentoPendenteResponseDto::new);
         return ResponseEntity.ok(page);
     }

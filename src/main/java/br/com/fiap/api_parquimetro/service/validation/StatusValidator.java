@@ -15,6 +15,6 @@ public class StatusValidator implements ConstraintValidator<ValidStatus, Status>
         if (status == null) {
             return false;
         }
-        return status == Status.OCUPADO || status == Status.LIVRE || status == Status.MANUTENCAO;
+        return status == Status.LIVRE || status == Status.MANUTENCAO;
     }
 }
