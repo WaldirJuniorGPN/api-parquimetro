@@ -19,4 +19,10 @@ public interface VeiculoService {
     ResponseEntity<VeiculoResponseDto> atualizar(Long  idVeiculo, VeiculoRequestDto dto);
 
     ResponseEntity<Void> deletar(Long id);
+
+    void registrarEntrada(Veiculo veiculo);
+
+    void resgistrarSaida(Veiculo veiculo);
+
+    Veiculo buscarVeiculo(Long id);
 }

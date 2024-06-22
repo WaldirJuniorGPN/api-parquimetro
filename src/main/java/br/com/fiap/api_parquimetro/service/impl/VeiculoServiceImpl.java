@@ -9,11 +9,14 @@ import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
 import br.com.fiap.api_parquimetro.repository.VeiculoRepository;
 import br.com.fiap.api_parquimetro.service.VeiculoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +29,7 @@ public class VeiculoServiceImpl implements VeiculoService {
     public ResponseEntity<VeiculoResponseDto> cadastrar(VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var veiculo = this.factory.criar(dto);
         var uri = uriComponentsBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
-        this.repository.save(veiculo);
+        this.salvarNoBanco(veiculo);
         return ResponseEntity.created(uri).body(new VeiculoResponseDto(veiculo));
     }
 
@@ -46,7 +49,7 @@ public class VeiculoServiceImpl implements VeiculoService {
     public ResponseEntity<VeiculoResponseDto> atualizar(Long idVeiculo, VeiculoRequestDto dto) {
         var veiculo = this.buscarNoBanco(idVeiculo);
         this.factory.atualizar(veiculo, dto);
-        this.repository.save(veiculo);
+        this.salvarNoBanco(veiculo);
         return ResponseEntity.ok(new VeiculoResponseDto(veiculo));
     }
 
@@ -55,6 +58,28 @@ public class VeiculoServiceImpl implements VeiculoService {
         var veiculo = this.buscarNoBanco(id);
         veiculo.setAtivo(false);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public void registrarEntrada(Veiculo veiculo) {
+        veiculo.setHoraDaEntrada(LocalDateTime.now());
+        this.salvarNoBanco(veiculo);
+    }
+
+    @Override
+    public void resgistrarSaida(Veiculo veiculo) {
+        veiculo.setHoraDaSaida(LocalDateTime.now());
+        this.salvarNoBanco(veiculo);
+    }
+
+    @Override
+    @Cacheable(value = "veiculos", key = "#id")
+    public Veiculo buscarVeiculo(Long id) {
+        return this.buscarNoBanco(id);
+    }
+
+    private void salvarNoBanco(Veiculo veiculo){
+        this.repository.save(veiculo);
     }
 
     private Veiculo buscarNoBanco(Long id) {

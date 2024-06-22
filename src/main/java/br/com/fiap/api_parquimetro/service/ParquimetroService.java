@@ -1,5 +1,6 @@
 package br.com.fiap.api_parquimetro.service;
 
+import br.com.fiap.api_parquimetro.model.Parquimetro;
 import br.com.fiap.api_parquimetro.model.dto.request.ParquimetroRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
@@ -21,4 +22,10 @@ public interface ParquimetroService {
     ResponseEntity<ParquimetroResponseDto> alterarStatus(Long id, StatusRequestDto status);
 
     ResponseEntity<Void> deletar(Long id);
+
+    void ocuparParquimetro(Parquimetro parquimetro);
+
+    void liberarParquimetro(Parquimetro parquimetro);
+
+    Parquimetro buscarParquimetro(Long id);
 }

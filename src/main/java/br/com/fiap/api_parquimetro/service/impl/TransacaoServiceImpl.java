@@ -2,16 +2,16 @@ package br.com.fiap.api_parquimetro.service.impl;
 
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
-import br.com.fiap.api_parquimetro.model.*;
+import br.com.fiap.api_parquimetro.model.Transacao;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoIniciadaResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoPagamentoPendenteResponseDto;
-import br.com.fiap.api_parquimetro.repository.ParquimetroRepository;
 import br.com.fiap.api_parquimetro.repository.TransacaoRepository;
-import br.com.fiap.api_parquimetro.repository.VeiculoRepository;
 import br.com.fiap.api_parquimetro.service.PagamentoService;
+import br.com.fiap.api_parquimetro.service.ParquimetroService;
 import br.com.fiap.api_parquimetro.service.TransacaoService;
+import br.com.fiap.api_parquimetro.service.VeiculoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,37 +20,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TransacaoServiceImpl implements TransacaoService {
 
     private final TransacaoRepository transacaoRepository;
-    private final VeiculoRepository veiculoRepository;
-    private final ParquimetroRepository parquimetroRepository;
     private final PagamentoService pagamentoService;
+    private final VeiculoService veiculoService;
+    private final ParquimetroService parquimetroService;
 
     @Override
     public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntrada(TransacaoRequestDto dto) {
         var transacao = new Transacao();
-        var veiculo = this.buscarVeiculo(dto.veiculoId());
-        var parquimetro = this.buscarParquimetro(dto.parquimetroId());
-
-        veiculo.setHoraDaEntrada(LocalDateTime.now());
-        parquimetro.setStatus(Status.OCUPADO);
+        var veiculo = this.veiculoService.buscarVeiculo(dto.veiculoId());
+        var parquimetro = this.parquimetroService.buscarParquimetro(dto.parquimetroId());
+        this.veiculoService.registrarEntrada(veiculo);
+        this.parquimetroService.ocuparParquimetro(parquimetro);
         transacao.setVeiculo(veiculo);
         transacao.setParquimetro(parquimetro);
-
-        this.transacaoRepository.save(transacao);
-        this.veiculoRepository.save(veiculo);
-        this.parquimetroRepository.save(parquimetro);
-
-        System.out.println(transacao);
-
+        this.salvarNoBanco(transacao);
         log.debug("Entrada registrada para o veículo ID: {}", dto.veiculoId());
         return ResponseEntity.ok(new TransacaoIniciadaResponseDto(transacao));
     }
@@ -58,27 +47,13 @@ public class TransacaoServiceImpl implements TransacaoService {
     @Override
     public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(Long id) {
         var transacao = this.buscarTransacao(id);
-        System.out.println(transacao);
         var veiculo = transacao.getVeiculo();
-        var calculadora = transacao.getParquimetro().getCalculadora();
         var parquimetro = transacao.getParquimetro();
-        parquimetro.setStatus(Status.LIVRE);
-        parquimetro.setCalculadora(calculadora);
-        veiculo.setHoraDaSaida(LocalDateTime.now());
-
-        var duracao = Duration.between(veiculo.getHoraDaEntrada(), veiculo.getHoraDaSaida());
-        var valorPago = this.calcularValor(duracao, calculadora);
-
-        transacao.setValorPago(valorPago);
-        transacao.setPagamentoPendente(false);
-        transacao.setParquimetro(parquimetro);
-        transacao.setValorPago(valorPago);
-
-        this.pagamentoService.processar();
-
-        this.transacaoRepository.save(transacao);
-        this.parquimetroRepository.save(parquimetro);
-
+        var valorPago = this.pagamentoService.calcularValor(veiculo.getHoraDaEntrada(), veiculo.getHoraDaSaida(), parquimetro.getCalculadora());
+        this.pagamentoService.processar(transacao, valorPago);
+        this.parquimetroService.liberarParquimetro(parquimetro);
+        this.veiculoService.resgistrarSaida(veiculo);
+        this.salvarNoBanco(transacao);
         log.debug("Saída registrada para a transação ID: {}", id);
         return ResponseEntity.ok(new TransacaoFinalizadaResponseDto(transacao));
     }
@@ -98,31 +73,11 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Cacheable(value = "transacoes", key = "#id")
     public ResponseEntity<?> buscarPorId(Long id) {
         var transacao = this.transacaoRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
         var dto = transacao.isPagamentoPendente() ? new TransacaoPagamentoPendenteResponseDto(transacao) : new TransacaoFinalizadaResponseDto(transacao);
         return ResponseEntity.ok(dto);
-    }
-
-    private BigDecimal calcularValor(Duration duracao, Calculadora calculadora) {
-        var horas = duracao.toHours();
-        var valorTotal = calculadora.getTarifaPorHora().multiply(BigDecimal.valueOf(horas));
-
-        var minutosExcedentes = duracao.toMinutes() % 60;
-        if (minutosExcedentes > 0) {
-            valorTotal = valorTotal.add(calculadora.getTarifaAdicional());
-        }
-        return valorTotal;
-    }
-
-    @Cacheable(value = "parquimetros", key = "#id")
-    private Parquimetro buscarParquimetro(Long id) {
-        return this.parquimetroRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
-    }
-
-    @Cacheable(value = "veiculos", key = "#id")
-    private Veiculo buscarVeiculo(Long id) {
-        return this.veiculoRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
     }
 
     @Cacheable(value = "transacoes", key = "#id")
@@ -138,5 +93,9 @@ public class TransacaoServiceImpl implements TransacaoService {
     private ControllerNotFoundException throwNotFoundException() {
         log.error("Entidade não encontrada");
         return new ControllerNotFoundException("Entidade não encontrada");
+    }
+
+    private void salvarNoBanco(Transacao transacao) {
+        this.transacaoRepository.save(transacao);
     }
 }
