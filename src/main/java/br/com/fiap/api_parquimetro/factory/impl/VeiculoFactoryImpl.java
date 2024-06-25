@@ -1,21 +1,22 @@
 package br.com.fiap.api_parquimetro.factory.impl;
 
-import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Motorista;
 import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
-import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
+import br.com.fiap.api_parquimetro.service.MotoristaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import static java.util.Objects.requireNonNull;
 
 @Component
 @Qualifier("veiculoFactory")
 @RequiredArgsConstructor
 public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequestDto> {
 
-    private final MotoristaRepository repository;
+    private final MotoristaService motoristaService;
 
     @Override
     public Veiculo criar(VeiculoRequestDto dto) {
@@ -43,6 +44,9 @@ public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequest
     }
 
     private Motorista buscarMotoristaNoBanco(Long id) {
-        return this.repository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException("Motorista não encontrado"));
+        var motoristaResponseDtoResponseEntity = motoristaService.buscarPorId(id);
+        var motorista = new Motorista();
+        motorista.setId(requireNonNull(motoristaResponseDtoResponseEntity.getBody()).id());
+        return motorista;
     }
 }

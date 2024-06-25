@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -46,13 +48,14 @@ public class TransacaoServiceImpl implements TransacaoService {
 
     @Override
     public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(Long id) {
+        var dataHoraSaida = LocalDateTime.now();
         var transacao = this.buscarTransacao(id);
         var veiculo = transacao.getVeiculo();
         var parquimetro = transacao.getParquimetro();
-        var valorPago = this.pagamentoService.calcularValor(veiculo.getHoraDaEntrada(), veiculo.getHoraDaSaida(), parquimetro.getCalculadora());
+        var valorPago = this.pagamentoService.calcularValor(veiculo.getHoraDaEntrada(), dataHoraSaida, parquimetro.getCalculadora());
         this.pagamentoService.processar(transacao, valorPago);
         this.parquimetroService.liberarParquimetro(parquimetro);
-        this.veiculoService.resgistrarSaida(veiculo);
+        this.veiculoService.registrarSaida(veiculo, dataHoraSaida);
         this.salvarNoBanco(transacao);
         log.debug("Saída registrada para a transação ID: {}", id);
         return ResponseEntity.ok(new TransacaoFinalizadaResponseDto(transacao));
@@ -81,7 +84,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Cacheable(value = "transacoes", key = "#id")
-    private Transacao buscarTransacao(Long id) {
+    public Transacao buscarTransacao(Long id) {
         return this.transacaoRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
     }
 

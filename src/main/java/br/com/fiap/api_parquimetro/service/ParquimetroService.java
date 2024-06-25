@@ -21,7 +21,7 @@ public interface ParquimetroService {
 
     ResponseEntity<ParquimetroResponseDto> alterarStatus(Long id, StatusRequestDto status);
 
-    ResponseEntity<Void> deletar(Long id);
+    void deletar(Long id);
 
     void ocuparParquimetro(Parquimetro parquimetro);
 

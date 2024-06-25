@@ -13,10 +13,11 @@ import lombok.*;
 public class Parquimetro extends EntidadeBase{
 
     private String localizacao;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calculadora_id")
     private Calculadora calculadora;
 }

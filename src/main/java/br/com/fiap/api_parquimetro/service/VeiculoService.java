@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDateTime;
+
 public interface VeiculoService {
 
     ResponseEntity<VeiculoResponseDto> cadastrar(VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder);
@@ -18,11 +20,11 @@ public interface VeiculoService {
 
     ResponseEntity<VeiculoResponseDto> atualizar(Long  idVeiculo, VeiculoRequestDto dto);
 
-    ResponseEntity<Void> deletar(Long id);
+    void deletar(Long id);
 
     void registrarEntrada(Veiculo veiculo);
 
-    void resgistrarSaida(Veiculo veiculo);
+    void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida);
 
     Veiculo buscarVeiculo(Long id);
 }

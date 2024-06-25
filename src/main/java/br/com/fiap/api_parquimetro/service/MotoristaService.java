@@ -17,5 +17,5 @@ public interface MotoristaService {
 
     ResponseEntity<MotoristaResponseDto> atualizar(Long idMotorista, MotoristaRequestDto dto);
 
-    ResponseEntity<Void> deletar(Long id);
+    void deletar(Long id);
 }

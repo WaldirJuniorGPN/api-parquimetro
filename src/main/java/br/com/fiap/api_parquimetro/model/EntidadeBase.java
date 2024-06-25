@@ -1,6 +1,12 @@
 package br.com.fiap.api_parquimetro.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +18,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public abstract class EntidadeBase {
+@Setter
+public class EntidadeBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +40,7 @@ public abstract class EntidadeBase {
     }
 
     @PreUpdate
-    public void preupdate() {
+    public void preUpdate() {
         this.updateDate = LocalDateTime.now();
     }
 }

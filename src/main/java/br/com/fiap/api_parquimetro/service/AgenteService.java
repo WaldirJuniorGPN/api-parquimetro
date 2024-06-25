@@ -1,21 +1,19 @@
 package br.com.fiap.api_parquimetro.service;
 
-import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
+import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.util.UriComponentsBuilder;
 
 public interface AgenteService {
 
-    ResponseEntity<AgenteResponseDto> cadastrar(AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder);
+    AgenteResponseDto cadastrar(AgenteRequestDto dto);
 
-    ResponseEntity<AgenteResponseDto> buscarPorId(Long id);
+    AgenteResponseDto buscarPorId(Long id);
 
-    ResponseEntity<Page<AgenteResponseDto>> buscarTodos(Pageable pageable);
+    Page<AgenteResponseDto> buscarTodos(Pageable pageable);
 
-    ResponseEntity<AgenteResponseDto> atualizar(Long id, AgenteRequestDto dto);
+    AgenteResponseDto atualizar(Long id, AgenteRequestDto dto);
 
-    ResponseEntity<Void> deletar(Long id);
+    void deletar(Long id);
 }

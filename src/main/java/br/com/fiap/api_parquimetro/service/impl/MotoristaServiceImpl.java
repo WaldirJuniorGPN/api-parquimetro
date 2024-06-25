@@ -3,12 +3,12 @@ package br.com.fiap.api_parquimetro.service.impl;
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
 import br.com.fiap.api_parquimetro.factory.EntityFactory;
-import br.com.fiap.api_parquimetro.factory.impl.MotoristaFactoryImpl;
 import br.com.fiap.api_parquimetro.model.Motorista;
 import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
 import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
 import br.com.fiap.api_parquimetro.service.MotoristaService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +24,7 @@ public class MotoristaServiceImpl implements MotoristaService {
     private final EntityFactory<Motorista, MotoristaRequestDto> factory;
 
     @Override
+    @Transactional
     public ResponseEntity<MotoristaResponseDto> cadastrar(MotoristaRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var motorista = this.factory.criar(dto);
         var uri = uriComponentsBuilder.path("/motorista/{id}").buildAndExpand(motorista.getId()).toUri();
@@ -52,10 +53,11 @@ public class MotoristaServiceImpl implements MotoristaService {
     }
 
     @Override
-    public ResponseEntity<Void> deletar(Long id) {
+    @Transactional
+    public void deletar(Long id) {
         var motorista = this.buscarNoBanco(id);
         motorista.setAtivo(false);
-        return ResponseEntity.noContent().build();
+        ResponseEntity.noContent().build();
     }
 
     private Motorista buscarNoBanco(Long id) {

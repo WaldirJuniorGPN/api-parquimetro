@@ -8,6 +8,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
 import br.com.fiap.api_parquimetro.repository.VeiculoRepository;
 import br.com.fiap.api_parquimetro.service.VeiculoService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class VeiculoServiceImpl implements VeiculoService {
     private final EntityFactory<Veiculo, VeiculoRequestDto> factory;
 
     @Override
+    @Transactional
     public ResponseEntity<VeiculoResponseDto> cadastrar(VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var veiculo = this.factory.criar(dto);
         var uri = uriComponentsBuilder.path("/veiculo/{id}").buildAndExpand(veiculo.getId()).toUri();
@@ -46,6 +48,7 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<VeiculoResponseDto> atualizar(Long idVeiculo, VeiculoRequestDto dto) {
         var veiculo = this.buscarNoBanco(idVeiculo);
         this.factory.atualizar(veiculo, dto);
@@ -54,10 +57,11 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     @Override
-    public ResponseEntity<Void> deletar(Long id) {
+    @Transactional
+    public void deletar(Long id) {
         var veiculo = this.buscarNoBanco(id);
         veiculo.setAtivo(false);
-        return ResponseEntity.noContent().build();
+        ResponseEntity.noContent().build();
     }
 
     @Override
@@ -67,8 +71,8 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     @Override
-    public void resgistrarSaida(Veiculo veiculo) {
-        veiculo.setHoraDaSaida(LocalDateTime.now());
+    public void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida) {
+        veiculo.setHoraDaSaida(dataHoraSaida);
         this.salvarNoBanco(veiculo);
     }
 

@@ -14,11 +14,11 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class Transacao extends EntidadeBase {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parquimetro_id")
     private Parquimetro parquimetro;
 

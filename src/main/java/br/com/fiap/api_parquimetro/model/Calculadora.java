@@ -19,4 +19,8 @@ public class Calculadora extends EntidadeBase {
 
     private BigDecimal tarifaPorHora;
     private BigDecimal tarifaAdicional;
+
+    public Calculadora(Long id) {
+        super.setId(id);
+    }
 }

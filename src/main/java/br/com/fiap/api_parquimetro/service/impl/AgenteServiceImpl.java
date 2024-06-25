@@ -8,12 +8,11 @@ import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
 import br.com.fiap.api_parquimetro.repository.AgenteRepository;
 import br.com.fiap.api_parquimetro.service.AgenteService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -23,39 +22,42 @@ public class AgenteServiceImpl implements AgenteService {
     private final EntityFactory<Agente, AgenteRequestDto> factory;
 
     @Override
-    public ResponseEntity<AgenteResponseDto> cadastrar(AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
+    @Transactional
+    public AgenteResponseDto cadastrar(AgenteRequestDto dto) {
         var agente = this.factory.criar(dto);
-        var uri = uriComponentsBuilder.path("/agente/{id}").buildAndExpand(agente.getId()).toUri();
         this.repository.save(agente);
-        return ResponseEntity.created(uri).body(new AgenteResponseDto(agente));
+
+        return new AgenteResponseDto(agente);
     }
 
     @Override
-    public ResponseEntity<AgenteResponseDto> buscarPorId(Long id) {
+    public AgenteResponseDto buscarPorId(Long id) {
         var agente = this.buscarNoBanco(id);
-        return ResponseEntity.ok(new AgenteResponseDto(agente));
+
+        return new AgenteResponseDto(agente);
     }
 
     @Override
-    public ResponseEntity<Page<AgenteResponseDto>> buscarTodos(Pageable pageable) {
-        var page = this.repository.findAllByAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException).map(AgenteResponseDto::new);
-        return ResponseEntity.ok(page);
+    public Page<AgenteResponseDto> buscarTodos(Pageable pageable) {
+        return this.repository.findAllByAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException).map(AgenteResponseDto::new);
     }
 
     @Override
-    public ResponseEntity<AgenteResponseDto> atualizar(Long id, AgenteRequestDto dto) {
+    @Transactional
+    public AgenteResponseDto atualizar(Long id, AgenteRequestDto dto) {
         var agente = this.buscarNoBanco(id);
         this.factory.atualizar(agente, dto);
         this.repository.save(agente);
-        return ResponseEntity.ok(new AgenteResponseDto(agente));
+
+        return new AgenteResponseDto(agente);
     }
 
     @Override
-    public ResponseEntity<Void> deletar(Long id) {
+    @Transactional
+    public void deletar(Long id) {
         var agente = this.buscarNoBanco(id);
         agente.setAtivo(false);
         this.repository.save(agente);
-        return ResponseEntity.noContent().build();
     }
 
     private Agente buscarNoBanco(Long id) {
