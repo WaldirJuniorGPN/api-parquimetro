@@ -1,6 +1,6 @@
 # Sistema de Gestão de Parquímetros
 
-## Visão Geral
+## Visão Geral2
 
 Este projeto tem como objetivo desenvolver um sistema eficiente e confiável para a gestão de parquímetros em uma cidade movimentada. A solução será construída utilizando o framework Spring, com a linguagem Java (versão 17). O sistema armazenará os dados no banco de dados PostgreSQL, que será executado em um contêiner Docker. O gerenciamento das dependências será realizado com o Maven.
 
