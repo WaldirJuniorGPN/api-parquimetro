@@ -15,6 +15,7 @@ public class CalculadoraFactory implements EntityFactory<Calculadora, Calculador
         var calculadora = new Calculadora();
         calculadora.setTarifaPorHora(dto.tarifaPorHora());
         calculadora.setTarifaAdicional(dto.tarifaAdicional());
+        calculadora.setTarifaFixaPorHora(dto.tarifaFixaPorHora());
         return calculadora;
     }
 
@@ -25,6 +26,9 @@ public class CalculadoraFactory implements EntityFactory<Calculadora, Calculador
         }
         if (!calculadora.getTarifaAdicional().equals(dto.tarifaAdicional())) {
             calculadora.setTarifaAdicional(dto.tarifaAdicional());
+        }
+        if (!calculadora.getTarifaFixaPorHora().equals(dto.tarifaFixaPorHora())) {
+            calculadora.setTarifaFixaPorHora(dto.tarifaFixaPorHora());
         }
     }
 }

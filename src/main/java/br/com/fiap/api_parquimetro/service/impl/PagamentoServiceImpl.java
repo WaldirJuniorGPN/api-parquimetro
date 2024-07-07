@@ -21,14 +21,29 @@ public class PagamentoServiceImpl implements PagamentoService {
     }
 
     @Override
-    public BigDecimal calcularValor(LocalDateTime horaEntrada, LocalDateTime horaSaida, Calculadora calculadora) {
+    public BigDecimal calcularValorFlexivel(LocalDateTime horaEntrada, LocalDateTime horaSaida, Calculadora calculadora) {
         var duracao = Duration.between(horaEntrada, horaSaida);
         var horas = duracao.toHours();
         var valorTotal = calculadora.getTarifaPorHora().multiply(BigDecimal.valueOf(horas));
         var minutosExcedentes = duracao.toMinutes() % 60;
+
         if (minutosExcedentes > 0) {
-            valorTotal = valorTotal.add(calculadora.getTarifaAdicional());
+            valorTotal = this.calcularAdicional(valorTotal, horaEntrada, horas, calculadora);
         }
+
         return valorTotal;
+    }
+
+    @Override
+    public BigDecimal calcularValorFixo(LocalDateTime horaDaEntrada, Integer duracao, Calculadora calculadora) {
+        return calculadora.getTarifaFixaPorHora().multiply(BigDecimal.valueOf(duracao));
+    }
+
+    @Override
+    public BigDecimal calcularAdicional(BigDecimal valorAPagar, LocalDateTime horaDaEntrada, long duracao, Calculadora calculadora) {
+        var duracaoExcedente = Duration.between(horaDaEntrada.plusHours(duracao), LocalDateTime.now());
+        var minutosExcedentes = duracaoExcedente.toMinutes();
+        var tarifaAdicional = calculadora.getTarifaAdicional().multiply(BigDecimal.valueOf(minutosExcedentes));
+        return valorAPagar.add(tarifaAdicional);
     }
 }

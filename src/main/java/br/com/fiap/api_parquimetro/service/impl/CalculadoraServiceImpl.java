@@ -8,6 +8,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.CalculadoraRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.CalculadoraResponseDto;
 import br.com.fiap.api_parquimetro.repository.CalculadoraRepository;
 import br.com.fiap.api_parquimetro.service.CalculadoraService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -61,10 +62,10 @@ public class CalculadoraServiceImpl implements CalculadoraService {
     }
 
     private Calculadora buscarNoBanco(Long id) {
-        return this.repository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException("Calculadora não encontrada"));
+        return this.repository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException(ConstantesUtils.CALCULADORA_NAO_ENCONTRADA));
     }
 
     private ControllerPropertyReferenceException throwPropertyReferenceException() {
-        return new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados");
+        return new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS);
     }
 }

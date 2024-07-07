@@ -7,10 +7,13 @@ import java.math.BigDecimal;
 
 public record CalculadoraRequestDto(
         @NotNull
-        @DecimalMin(value = "0.00", inclusive = true)
+        @DecimalMin(value = "0.00")
         BigDecimal tarifaPorHora,
         @NotNull
-        @DecimalMin(value = "0.00", inclusive = true)
-        BigDecimal tarifaAdicional
+        @DecimalMin(value = "0.00")
+        BigDecimal tarifaAdicional,
+        @NotNull
+        @DecimalMin(value = "0.00")
+        BigDecimal tarifaFixaPorHora
 ) {
 }

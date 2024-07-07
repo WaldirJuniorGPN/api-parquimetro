@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
 @Entity
 @Table(name = "transacoes")
@@ -22,6 +23,8 @@ public class Transacao extends EntidadeBase {
     @JoinColumn(name = "parquimetro_id")
     private Parquimetro parquimetro;
 
+    private Duration tempoEstacionado;
+
     private BigDecimal valorPago;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -29,4 +32,7 @@ public class Transacao extends EntidadeBase {
     private Agente agente;
 
     private boolean pagamentoPendente = true;
+
+    @Enumerated(EnumType.STRING)
+    private TipoTransacao tipo;
 }

@@ -8,6 +8,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
 import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
 import br.com.fiap.api_parquimetro.service.MotoristaService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -65,10 +66,10 @@ public class MotoristaServiceImpl implements MotoristaService {
     }
 
     private ControllerNotFoundException throwMotoristaNotFoundException() {
-        return new ControllerNotFoundException("Motorista não encontrado");
+        return new ControllerNotFoundException(ConstantesUtils.MOTORISTA_NAO_ENCONTRADO);
     }
 
     private ControllerPropertyReferenceException throwPropertyReferenceException() {
-        return new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados");
+        return new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS);
     }
 }

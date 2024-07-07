@@ -12,6 +12,7 @@ import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
 import br.com.fiap.api_parquimetro.repository.ParquimetroRepository;
 import br.com.fiap.api_parquimetro.service.CalculadoraService;
 import br.com.fiap.api_parquimetro.service.ParquimetroService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -102,13 +103,13 @@ public class ParquimetroServiceImpl implements ParquimetroService {
     }
 
     private Parquimetro buscarNoBanco(Long id) {
-        return this.parquimetroRepository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException("Parquimetro não encontrado"));
+        return this.parquimetroRepository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException(ConstantesUtils.PARQUIMETRO_NAO_ENCONTRADO));
     }
 
     private Calculadora buscarCalculadora(Long id) {
         var calculadoraResponse = calculadoraService.buscarPorId(id);
         if(isNull(calculadoraResponse)) {
-            throw new ControllerNotFoundException("Calculadora não encontrada");
+            throw new ControllerNotFoundException(ConstantesUtils.CALCULADORA_NAO_ENCONTRADA);
         }
 
         return new Calculadora(calculadoraResponse.id());
@@ -116,7 +117,7 @@ public class ParquimetroServiceImpl implements ParquimetroService {
 
     private Page<ParquimetroResponseDto> buscarPorParquimetro(Pageable pageable) {
         return this.parquimetroRepository.findAllByAtivoTrue(pageable).orElseThrow(
-                () -> new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados")).map(ParquimetroResponseDto::new);
+                () -> new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS)).map(ParquimetroResponseDto::new);
     }
 
 }

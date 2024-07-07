@@ -1,6 +1,7 @@
 package br.com.fiap.api_parquimetro.controller;
 
-import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestDto;
+import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFixoDto;
+import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFlexivelDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoIniciadaResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoPagamentoPendenteResponseDto;
@@ -19,9 +20,14 @@ public class TransacaoController {
 
     private final TransacaoService service;
 
-    @PostMapping
-    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntrada(@Valid @RequestBody TransacaoRequestDto dto) {
-        return this.service.registrarEntrada(dto);
+    @PostMapping("/tempo-flexivel")
+    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFlexivel(@Valid @RequestBody TransacaoRequestFlexivelDto dto) {
+        return this.service.registrarEntradaTempoFlexivel(dto);
+    }
+
+    @PostMapping("/tempo-fixo")
+    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFixo(@Valid @RequestBody TransacaoRequestFixoDto dto){
+     return this.service.registrarEntradaTempoFixo(dto);
     }
 
     @PatchMapping("/{id}/saida")

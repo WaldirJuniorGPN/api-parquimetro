@@ -8,6 +8,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
 import br.com.fiap.api_parquimetro.repository.VeiculoRepository;
 import br.com.fiap.api_parquimetro.service.VeiculoService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -91,10 +92,10 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     private ControllerNotFoundException throwVeiculoNotFoundException() {
-        return new ControllerNotFoundException("Veiculo não encontrado");
+        return new ControllerNotFoundException(ConstantesUtils.VEICULO_NAO_ENCONTRADO);
     }
 
     private ControllerPropertyReferenceException throwPropertyReferenceException() {
-        return new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados");
+        return new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS);
     }
 }

@@ -9,5 +9,9 @@ import java.time.LocalDateTime;
 public interface PagamentoService {
     void processar(Transacao transacao, BigDecimal valorPago);
 
-    BigDecimal calcularValor(LocalDateTime horaEntrdada, LocalDateTime horaSaida, Calculadora calculadora);
+    BigDecimal calcularValorFlexivel(LocalDateTime horaEntrdada, LocalDateTime horaSaida, Calculadora calculadora);
+
+    BigDecimal calcularValorFixo(LocalDateTime horaDaEntrada, Integer duracao,  Calculadora calculadora);
+
+    BigDecimal calcularAdicional(BigDecimal valorAPagar, LocalDateTime horaDaEntrada, long duracao, Calculadora calculadora);
 }
