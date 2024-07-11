@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record CalculadoraRequestDto(
+public record TarifaRequestDto(
         @NotNull
         @DecimalMin(value = "0.00")
         BigDecimal tarifaPorHora,

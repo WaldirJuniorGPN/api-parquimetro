@@ -3,15 +3,15 @@ package br.com.fiap.api_parquimetro.service.impl;
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
 import br.com.fiap.api_parquimetro.factory.EntityFactory;
-import br.com.fiap.api_parquimetro.model.Calculadora;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
 import br.com.fiap.api_parquimetro.model.Status;
+import br.com.fiap.api_parquimetro.model.Tarifa;
 import br.com.fiap.api_parquimetro.model.dto.request.ParquimetroRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
 import br.com.fiap.api_parquimetro.repository.ParquimetroRepository;
-import br.com.fiap.api_parquimetro.service.CalculadoraService;
 import br.com.fiap.api_parquimetro.service.ParquimetroService;
+import br.com.fiap.api_parquimetro.service.TarifaService;
 import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import static java.util.Objects.isNull;
 
@@ -29,47 +28,45 @@ import static java.util.Objects.isNull;
 public class ParquimetroServiceImpl implements ParquimetroService {
 
     private final ParquimetroRepository parquimetroRepository;
-    private final CalculadoraService calculadoraService;
+    private final TarifaService tarifaService;
     private final EntityFactory<Parquimetro, ParquimetroRequestDto> factory;
 
     @Override
     @Transactional
-    public ResponseEntity<ParquimetroResponseDto> cadastrar(ParquimetroRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
+    public ParquimetroResponseDto cadastrar(ParquimetroRequestDto dto) {
         var parquimetro = this.factory.criar(dto);
         var calculadora = this.buscarCalculadora(dto.calculadoraId());
-        parquimetro.setCalculadora(calculadora);
-        var uri = uriComponentsBuilder.path("/parquimetro/{id}").buildAndExpand(parquimetro.getId()).toUri();
+        parquimetro.setTarifa(calculadora);
         this.salvarNoBanco(parquimetro);
-        return ResponseEntity.created(uri).body(new ParquimetroResponseDto(parquimetro));
+        return new ParquimetroResponseDto(parquimetro);
     }
 
     @Override
-    public ResponseEntity<Page<ParquimetroResponseDto>> buscarTodos(Pageable pageable) {
-        var page = buscarPorParquimetro(pageable);
-        return ResponseEntity.ok(page);
+    public Page<ParquimetroResponseDto> buscarTodos(Pageable pageable) {
+        return buscarPorParquimetro(pageable);
     }
 
     @Override
-    public ResponseEntity<ParquimetroResponseDto> buscarPorId(Long id) {
+    public ParquimetroResponseDto buscarPorId(Long id) {
         var parquimetro = this.buscarParquimetro(id);
-        return ResponseEntity.ok(new ParquimetroResponseDto(parquimetro));
+        return new ParquimetroResponseDto(parquimetro);
     }
 
     @Override
-    public ResponseEntity<ParquimetroResponseDto> atualzar(Long id, ParquimetroRequestDto dto) {
+    public ParquimetroResponseDto atualzar(Long id, ParquimetroRequestDto dto) {
         var parquimetro = this.buscarParquimetro(id);
         this.factory.atualizar(parquimetro, dto);
         this.salvarNoBanco(parquimetro);
-        return ResponseEntity.ok(new ParquimetroResponseDto(parquimetro));
+        return new ParquimetroResponseDto(parquimetro);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<ParquimetroResponseDto> alterarStatus(Long id, StatusRequestDto status) {
+    public ParquimetroResponseDto alterarStatus(Long id, StatusRequestDto status) {
         var parquimetro = this.buscarParquimetro(id);
         parquimetro.setStatus(status.status());
         this.salvarNoBanco(parquimetro);
-        return ResponseEntity.ok(new ParquimetroResponseDto(parquimetro));
+        return new ParquimetroResponseDto(parquimetro);
     }
 
     @Override
@@ -106,13 +103,13 @@ public class ParquimetroServiceImpl implements ParquimetroService {
         return this.parquimetroRepository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException(ConstantesUtils.PARQUIMETRO_NAO_ENCONTRADO));
     }
 
-    private Calculadora buscarCalculadora(Long id) {
-        var calculadoraResponse = calculadoraService.buscarPorId(id);
+    private Tarifa buscarCalculadora(Long id) {
+        var calculadoraResponse = tarifaService.buscarPorId(id);
         if(isNull(calculadoraResponse)) {
-            throw new ControllerNotFoundException(ConstantesUtils.CALCULADORA_NAO_ENCONTRADA);
+            throw new ControllerNotFoundException(ConstantesUtils.TARIFA_NAO_ENCONTRADA);
         }
 
-        return new Calculadora(calculadoraResponse.id());
+        return new Tarifa(calculadoraResponse.id());
     }
 
     private Page<ParquimetroResponseDto> buscarPorParquimetro(Pageable pageable) {

@@ -14,39 +14,51 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("transacao")
+@RequestMapping("transacoes")
 @RequiredArgsConstructor
 public class TransacaoController {
 
     private final TransacaoService service;
 
     @PostMapping("/tempo-flexivel")
-    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFlexivel(@Valid @RequestBody TransacaoRequestFlexivelDto dto) {
-        return this.service.registrarEntradaTempoFlexivel(dto);
+    public ResponseEntity<TransacaoIniciadaResponseDto> iniciarTransacaoTempoFlexivel(@Valid @RequestBody TransacaoRequestFlexivelDto dto) {
+        var transacaoIniciadaResponseDto = this.service.iniciarTransacaoTempoFlexivel(dto);
+
+        return ResponseEntity.ok(transacaoIniciadaResponseDto);
     }
 
     @PostMapping("/tempo-fixo")
-    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFixo(@Valid @RequestBody TransacaoRequestFixoDto dto){
-     return this.service.registrarEntradaTempoFixo(dto);
+    public ResponseEntity<TransacaoIniciadaResponseDto> iniciarTransacaoTempoFixo(@Valid @RequestBody TransacaoRequestFixoDto dto) {
+        var transacaoIniciadaResponseDto = this.service.iniciarTransacaoTempoFixo(dto);
+
+        return ResponseEntity.ok(transacaoIniciadaResponseDto);
     }
 
     @PatchMapping("/{id}/saida")
-    public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(@PathVariable Long id) {
-        return this.service.registrarSaida(id);
+    public ResponseEntity<TransacaoFinalizadaResponseDto> finalizarTransacao(@PathVariable Long id) {
+        var transacaoIniciadaResponseDto = this.service.finalizarTransacao(id);
+
+        return ResponseEntity.ok(transacaoIniciadaResponseDto);
     }
 
     @GetMapping("/pendentes-de-pagamento")
-    public ResponseEntity<Page<TransacaoPagamentoPendenteResponseDto>> buscarTransacoesPendentesDePagamento(Pageable pageable) {
-        return this.service.buscarTransacoesPendentesDePagamento(pageable);
+    public ResponseEntity<Page<TransacaoPagamentoPendenteResponseDto>> listarTransacoesPendentes(Pageable pageable) {
+        var transacaoPagamentoPendenteResponseDtos = this.service.listarTransacoesPendentes(pageable);
+
+        return ResponseEntity.ok(transacaoPagamentoPendenteResponseDtos);
     }
 
     @GetMapping("/pagas")
-    public ResponseEntity<Page<TransacaoFinalizadaResponseDto>> buscarTransacoesPagas(Pageable pageable) {
-        return this.service.buscarTransacoesPagas(pageable);
+    public ResponseEntity<Page<TransacaoFinalizadaResponseDto>> listarTransacoesConcluidas(Pageable pageable) {
+        var transacaoFinalizadaResponseDtos = this.service.listarTransacoesConcluidas(pageable);
+
+        return ResponseEntity.ok(transacaoFinalizadaResponseDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-        return this.service.buscarPorId(id);
+        var responseDto = this.service.buscarPorId(id);
+
+        return ResponseEntity.ok(responseDto);
     }
 }

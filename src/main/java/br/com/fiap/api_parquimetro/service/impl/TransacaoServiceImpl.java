@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -38,54 +37,50 @@ public class TransacaoServiceImpl implements TransacaoService {
     private final ParquimetroService parquimetroService;
 
     @Override
-    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFlexivel(TransacaoRequestFlexivelDto dto) {
+    public TransacaoIniciadaResponseDto iniciarTransacaoTempoFlexivel(TransacaoRequestFlexivelDto dto) {
         return registrarEntrada(dto.veiculoId(), dto.parquimetroId(), TipoTransacao.TEMPO_FLEXIVEL, null);
     }
 
     @Override
-    public ResponseEntity<TransacaoIniciadaResponseDto> registrarEntradaTempoFixo(TransacaoRequestFixoDto dto) {
+    public TransacaoIniciadaResponseDto iniciarTransacaoTempoFixo(TransacaoRequestFixoDto dto) {
         return registrarEntrada(dto.veiculoId(), dto.parquimetroId(), TipoTransacao.TEMPO_FIXO, dto.duracao());
     }
 
     @Override
-    public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(Long id) {
+    public TransacaoFinalizadaResponseDto finalizarTransacao(Long id) {
         var transacao = this.buscarTransacao(id);
+        transacao.setHoraDaSaida(LocalDateTime.now());
         var veiculo = transacao.getVeiculo();
         var parquimetro = transacao.getParquimetro();
-        var dataHoraSaida = LocalDateTime.now();
 
-        processarSaida(transacao, veiculo, parquimetro, dataHoraSaida);
+        processarSaida(transacao, veiculo, parquimetro, transacao.getHoraDaSaida());
 
         this.parquimetroService.liberarParquimetro(parquimetro);
-        this.veiculoService.registrarSaida(veiculo, dataHoraSaida);
         this.salvarNoBanco(transacao);
 
         log.debug(ConstantesUtils.SAIDA_REGISTRADA_TRANSACAO, id);
-        return ResponseEntity.ok(new TransacaoFinalizadaResponseDto(transacao));
+        return new TransacaoFinalizadaResponseDto(transacao);
     }
 
     @Override
-    public ResponseEntity<Page<TransacaoPagamentoPendenteResponseDto>> buscarTransacoesPendentesDePagamento(Pageable pageable) {
-        var page = this.transacaoRepository.findAllByPagamentoPendenteTrueAndAtivoTrue(pageable)
+    public Page<TransacaoPagamentoPendenteResponseDto> listarTransacoesPendentes(Pageable pageable) {
+        return this.transacaoRepository.findAllByPagamentoPendenteTrueAndAtivoTrue(pageable)
                 .orElseThrow(this::throwPropertyReferenceException)
                 .map(TransacaoPagamentoPendenteResponseDto::new);
-        return ResponseEntity.ok(page);
     }
 
     @Override
-    public ResponseEntity<Page<TransacaoFinalizadaResponseDto>> buscarTransacoesPagas(Pageable pageable) {
-        var page = this.transacaoRepository.findAllByPagamentoPendenteFalseAndAtivoTrue(pageable)
+    public Page<TransacaoFinalizadaResponseDto> listarTransacoesConcluidas(Pageable pageable) {
+        return this.transacaoRepository.findAllByPagamentoPendenteFalseAndAtivoTrue(pageable)
                 .orElseThrow(this::throwPropertyReferenceException)
                 .map(TransacaoFinalizadaResponseDto::new);
-        return ResponseEntity.ok(page);
     }
 
     @Override
     @Cacheable(value = "transacoes", key = "#id")
-    public ResponseEntity<?> buscarPorId(Long id) {
+    public Object buscarPorId(Long id) {
         var transacao = this.transacaoRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
-        var dto = transacao.isPagamentoPendente() ? new TransacaoPagamentoPendenteResponseDto(transacao) : new TransacaoFinalizadaResponseDto(transacao);
-        return ResponseEntity.ok(dto);
+        return transacao.isPagamentoPendente() ? new TransacaoPagamentoPendenteResponseDto(transacao) : new TransacaoFinalizadaResponseDto(transacao);
     }
 
     @Cacheable(value = "transacoes", key = "#id")
@@ -93,11 +88,10 @@ public class TransacaoServiceImpl implements TransacaoService {
         return this.transacaoRepository.findByIdAndAtivoTrue(id).orElseThrow(this::throwNotFoundException);
     }
 
-    private ResponseEntity<TransacaoIniciadaResponseDto> registrarEntrada(Long veiculoId, Long parquimetroId, TipoTransacao tipo, Integer duracao){
+    private TransacaoIniciadaResponseDto registrarEntrada(Long veiculoId, Long parquimetroId, TipoTransacao tipo, Integer duracao){
         var transacao = new Transacao();
         var veiculo = this.veiculoService.buscarVeiculo(veiculoId);
         var parquimetro = this.parquimetroService.buscarParquimetro(parquimetroId);
-        this.veiculoService.registrarEntrada(veiculo);
         this.parquimetroService.ocuparParquimetro(parquimetro);
 
         transacao.setVeiculo(veiculo);
@@ -106,31 +100,31 @@ public class TransacaoServiceImpl implements TransacaoService {
 
         if (tipo == TipoTransacao.TEMPO_FIXO) {
             transacao.setTempoEstacionado(Duration.ofHours(duracao));
-            var valorPago = this.pagamentoService.calcularValorFixo(veiculo.getHoraDaEntrada(), duracao, parquimetro.getCalculadora());
+            var valorPago = this.pagamentoService.calcularValorFixo(transacao.getInputDate(), duracao, parquimetro.getTarifa());
             transacao.setValorPago(valorPago);
             transacao.setPagamentoPendente(false);
         }
 
         this.salvarNoBanco(transacao);
         log.debug(ConstantesUtils.ENTRADA_REGISTRADA_VEICULO, veiculoId);
-        return ResponseEntity.ok(new TransacaoIniciadaResponseDto(transacao));
+        return new TransacaoIniciadaResponseDto(transacao);
     }
 
     private void processarSaida(Transacao transacao, Veiculo veiculo, Parquimetro parquimetro, LocalDateTime dataHoraSaida) {
         if (transacao.getTipo() == TipoTransacao.TEMPO_FLEXIVEL) {
-            var valorPago = this.pagamentoService.calcularValorFlexivel(veiculo.getHoraDaEntrada(), dataHoraSaida, parquimetro.getCalculadora());
-            transacao.setTempoEstacionado(Duration.between(veiculo.getHoraDaEntrada(), dataHoraSaida));
-            this.pagamentoService.processar(transacao, valorPago);
+            var valorPago = this.pagamentoService.calcularValorFlexivel(transacao.getInputDate(), dataHoraSaida, parquimetro.getTarifa());
+            transacao.setTempoEstacionado(Duration.between(transacao.getInputDate(), dataHoraSaida));
+            this.pagamentoService.processarPagamento(transacao, valorPago);
         } else if (transacao.getTipo() == TipoTransacao.TEMPO_FIXO) {
-            var horaDaEntrada = veiculo.getHoraDaEntrada();
+            var horaDaEntrada = transacao.getInputDate();
             var duracaoEstabelecida = transacao.getTempoEstacionado();
             var duracaoAtual = Duration.between(horaDaEntrada, dataHoraSaida);
 
             if (duracaoAtual.toHours() > duracaoEstabelecida.toHours()) {
-                var valorPago = this.pagamentoService.calcularValorFixo(horaDaEntrada, (int) duracaoEstabelecida.toHours(), parquimetro.getCalculadora());
-                valorPago = this.pagamentoService.calcularAdicional(valorPago, horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getCalculadora());
+                var valorPago = this.pagamentoService.calcularValorFixo(horaDaEntrada, (int) duracaoEstabelecida.toHours(), parquimetro.getTarifa());
+                valorPago = this.pagamentoService.calcularTarifaAdicional(valorPago, horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getTarifa());
                 transacao.setTempoEstacionado(duracaoAtual);
-                this.pagamentoService.processar(transacao, valorPago);
+                this.pagamentoService.processarPagamento(transacao, valorPago);
             } else {
                 transacao.setTempoEstacionado(duracaoAtual);
             }

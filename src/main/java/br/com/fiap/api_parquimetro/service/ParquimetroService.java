@@ -6,20 +6,18 @@ import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.util.UriComponentsBuilder;
 
 public interface ParquimetroService {
 
-    ResponseEntity<ParquimetroResponseDto> cadastrar(ParquimetroRequestDto dto, UriComponentsBuilder uriComponentsBuilder);
+    ParquimetroResponseDto cadastrar(ParquimetroRequestDto dto);
 
-    ResponseEntity<Page<ParquimetroResponseDto>> buscarTodos(Pageable pageable);
+    Page<ParquimetroResponseDto> buscarTodos(Pageable pageable);
 
-    ResponseEntity<ParquimetroResponseDto> buscarPorId(Long id);
+    ParquimetroResponseDto buscarPorId(Long id);
 
-    ResponseEntity<ParquimetroResponseDto> atualzar(Long id, ParquimetroRequestDto dto);
+    ParquimetroResponseDto atualzar(Long id, ParquimetroRequestDto dto);
 
-    ResponseEntity<ParquimetroResponseDto> alterarStatus(Long id, StatusRequestDto status);
+    ParquimetroResponseDto alterarStatus(Long id, StatusRequestDto status);
 
     void deletar(Long id);
 

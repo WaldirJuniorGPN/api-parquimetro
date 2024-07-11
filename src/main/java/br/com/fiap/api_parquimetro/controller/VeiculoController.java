@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@RequestMapping("/veiculo")
+@RequestMapping("/veiculos")
 @RestController
 @RequiredArgsConstructor
 public class VeiculoController {
@@ -30,22 +30,31 @@ public class VeiculoController {
 
     @PostMapping
     public ResponseEntity<VeiculoResponseDto> cadastrar(@Valid @RequestBody VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
-        return this.service.cadastrar(dto, uriComponentsBuilder);
+        var veiculoResponseDto = this.service.cadastrar(dto);
+        var uri = uriComponentsBuilder.path("/veiculos/{id}").buildAndExpand(veiculoResponseDto.id()).toUri();
+
+        return ResponseEntity.created(uri).body(veiculoResponseDto);
     }
 
     @GetMapping
     public ResponseEntity<Page<VeiculoResponseDto>> buscarTodos(Pageable pageable) {
-        return this.service.buscarTodos(pageable);
+        var veiculoRsponseDtos = this.service.buscarTodos(pageable);
+
+        return ResponseEntity.ok(veiculoRsponseDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VeiculoResponseDto> buscarPorId(@PathVariable Long id) {
-        return this.service.buscarPorId(id);
+        var veiculoResponseDto = this.service.buscarPorId(id);
+
+        return ResponseEntity.ok(veiculoResponseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<VeiculoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody VeiculoRequestDto dto) {
-        return this.service.atualizar(id, dto);
+        var veiculoResponseDto = this.service.atualizar(id, dto);
+
+        return ResponseEntity.ok(veiculoResponseDto);
     }
 
     @DeleteMapping("/{id}")

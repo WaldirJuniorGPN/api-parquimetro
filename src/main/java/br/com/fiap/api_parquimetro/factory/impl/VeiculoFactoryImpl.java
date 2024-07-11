@@ -24,7 +24,6 @@ public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequest
         veiculo.setPlacaDoVeiculo(dto.placaDoVeiculo());
         veiculo.setModelo(dto.modelo());
         veiculo.setCor(dto.cor());
-        veiculo.setHoraDaEntrada(dto.horaDaEntrada());
         veiculo.setMotorista(this.buscarMotoristaNoBanco(dto.idMotorista()));
         return veiculo;
     }
@@ -44,9 +43,9 @@ public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequest
     }
 
     private Motorista buscarMotoristaNoBanco(Long id) {
-        var motoristaResponseDtoResponseEntity = motoristaService.buscarPorId(id);
+        var motoristaResponseDto = motoristaService.buscarPorId(id);
         var motorista = new Motorista();
-        motorista.setId(requireNonNull(motoristaResponseDtoResponseEntity.getBody()).id());
+        motorista.setId(motoristaResponseDto.id());
         return motorista;
     }
 }

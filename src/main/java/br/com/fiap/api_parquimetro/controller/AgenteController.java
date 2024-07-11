@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@RequestMapping("/agente")
+@RequestMapping("/agentes")
 @RestController
 @RequiredArgsConstructor
 public class AgenteController {
@@ -31,7 +31,7 @@ public class AgenteController {
     @PostMapping
     public ResponseEntity<AgenteResponseDto> cadastrar(@Valid @RequestBody AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var agenteResponseDto = this.service.cadastrar(dto);
-        var uri = uriComponentsBuilder.path("/agente/{id}").buildAndExpand(agenteResponseDto.id()).toUri();
+        var uri = uriComponentsBuilder.path("/agentes/{id}").buildAndExpand(agenteResponseDto.id()).toUri();
 
         return ResponseEntity.created(uri).body(agenteResponseDto);
     }
