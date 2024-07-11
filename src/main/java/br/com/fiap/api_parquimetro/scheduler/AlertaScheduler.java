@@ -37,7 +37,7 @@ public class AlertaScheduler {
     }
 
     private void enviarAlerta(Transacao transacao) {
-        String mensagem = String.format(ConstantesUtils.MENSAGEM_ALERTA_TEMPO_ESTACIONADO, transacao.getVeiculo().getPlacaDoVeiculo(), transacao.getParquimetro().getId());
+        String mensagem = String.format(ConstantesUtils.MENSAGEM_ALERTA_TEMPO_ESTACIONADO, transacao.getVeiculo().getPlacaDoVeiculo(), transacao.getParquimetro().getLocalizacao());
         emailService.enviarEmail(transacao.getVeiculo().getMotorista().getEmail(), ConstantesUtils.ASSUNTO_ALERTA_TEMPO_ESTACIONADO, mensagem);
         log.debug(ConstantesUtils.ALERTA_ENVIADO_PARA_CONDUTOR, transacao.getVeiculo().getPlacaDoVeiculo());
     }

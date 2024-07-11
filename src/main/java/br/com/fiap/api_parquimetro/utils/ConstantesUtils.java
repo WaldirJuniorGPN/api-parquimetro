@@ -20,7 +20,7 @@ public class ConstantesUtils {
     public static final String PAGAMENTO_PROCESSADO_SUCESSO = "Pagamento processado com sucesso!";
     public static final String VERIFICANDO_TRANSACOES_FIXAS = "Verificando transações com tempo fixo prestes a expirar.";
     public static final int TEMPO_ALERTA_MINUTOS = 10;
-    public static final String MENSAGEM_ALERTA_TEMPO_ESTACIONADO = "Seu tempo de estacionamento está prestes a expirar, Veículo: %s, Parquímetro: %d";
+    public static final String MENSAGEM_ALERTA_TEMPO_ESTACIONADO = "Seu tempo de estacionamento está prestes a expirar, Veículo de placa %s, Parquímetro: %s";
     public static final String ASSUNTO_ALERTA_TEMPO_ESTACIONADO = "Alerta de Tempo Estacionado";
     public static final String ALERTA_ENVIADO_PARA_CONDUTOR = "Alerta enviado para o condutor do veículo {}.";
     public static final String RECIBO_GERADO = "Recibo gerado: {}";
