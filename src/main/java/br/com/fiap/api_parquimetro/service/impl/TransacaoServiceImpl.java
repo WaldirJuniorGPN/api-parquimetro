@@ -12,10 +12,7 @@ import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaRespons
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoIniciadaResponseDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoPagamentoPendenteResponseDto;
 import br.com.fiap.api_parquimetro.repository.TransacaoRepository;
-import br.com.fiap.api_parquimetro.service.PagamentoService;
-import br.com.fiap.api_parquimetro.service.ParquimetroService;
-import br.com.fiap.api_parquimetro.service.TransacaoService;
-import br.com.fiap.api_parquimetro.service.VeiculoService;
+import br.com.fiap.api_parquimetro.service.*;
 import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +32,8 @@ public class TransacaoServiceImpl implements TransacaoService {
     private final PagamentoService pagamentoService;
     private final VeiculoService veiculoService;
     private final ParquimetroService parquimetroService;
+    private final ReciboService reciboService;
+    private final ImpressaoService impressaoService;
 
     @Override
     public TransacaoIniciadaResponseDto iniciarTransacaoTempoFlexivel(TransacaoRequestFlexivelDto dto) {
@@ -57,6 +56,11 @@ public class TransacaoServiceImpl implements TransacaoService {
 
         this.parquimetroService.liberarParquimetro(parquimetro);
         this.salvarNoBanco(transacao);
+
+        var recibo = reciboService.gerarRecibo(transacao);
+        log.debug(ConstantesUtils.RECIBO_GERADO, recibo);
+
+        impressaoService.imprimirRecibo(recibo);
 
         log.debug(ConstantesUtils.SAIDA_REGISTRADA_TRANSACAO, id);
         return new TransacaoFinalizadaResponseDto(transacao);

@@ -15,3 +15,16 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
       format_sql: false
+
+      spring:
+        mail:
+          host: smtp.gmail.com
+          port: 587
+          username: postechchallenge@gmail.com
+          password: Parquimetro@@
+          properties:
+            mail:
+              smtp:
+                auth: true
+                starttls:
+                  enable: true

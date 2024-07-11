@@ -23,4 +23,5 @@ public class ConstantesUtils {
     public static final String MENSAGEM_ALERTA_TEMPO_ESTACIONADO = "Seu tempo de estacionamento está prestes a expirar, Veículo: %s, Parquímetro: %d";
     public static final String ASSUNTO_ALERTA_TEMPO_ESTACIONADO = "Alerta de Tempo Estacionado";
     public static final String ALERTA_ENVIADO_PARA_CONDUTOR = "Alerta enviado para o condutor do veículo {}.";
+    public static final String RECIBO_GERADO = "Recibo gerado: {}";
 }
