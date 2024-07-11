@@ -22,9 +22,9 @@ public interface VeiculoService {
 
     void deletar(Long id);
 
-    void registrarEntrada(Veiculo veiculo);
-
-    void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida);
+//    void registrarEntrada(Veiculo veiculo);
+//
+//    void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida);
 
     Veiculo buscarVeiculo(Long id);
 }

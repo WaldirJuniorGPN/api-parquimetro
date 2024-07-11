@@ -16,4 +16,6 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     Optional<Page<Transacao>> findAllByAtivoTrue(Pageable pageable);
 
     Optional<Transacao> findByIdAndAtivoTrue(Long id);
+
+
 }

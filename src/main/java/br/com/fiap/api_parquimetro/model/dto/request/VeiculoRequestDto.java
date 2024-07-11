@@ -15,9 +15,7 @@ public record VeiculoRequestDto(
         String modelo,
         @NotBlank
         String cor,
-        @NotNull
-        @NotPastValid
-        LocalDateTime horaDaEntrada,
+
         @NotNull
         Long idMotorista
 ) {

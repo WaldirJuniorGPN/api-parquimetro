@@ -64,17 +64,17 @@ public class VeiculoServiceImpl implements VeiculoService {
         ResponseEntity.noContent().build();
     }
 
-    @Override
-    public void registrarEntrada(Veiculo veiculo) {
-        veiculo.setHoraDaEntrada(LocalDateTime.now());
-        this.salvarNoBanco(veiculo);
-    }
-
-    @Override
-    public void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida) {
-        veiculo.setHoraDaSaida(dataHoraSaida);
-        this.salvarNoBanco(veiculo);
-    }
+//    @Override
+//    public void registrarEntrada(Veiculo veiculo) {
+//        veiculo.setHoraDaEntrada(LocalDateTime.now());
+//        this.salvarNoBanco(veiculo);
+//    }
+//
+//    @Override
+//    public void registrarSaida(Veiculo veiculo, LocalDateTime dataHoraSaida) {
+//        veiculo.setHoraDaSaida(dataHoraSaida);
+//        this.salvarNoBanco(veiculo);
+//    }
 
     @Override
     @Cacheable(value = "veiculos", key = "#id")

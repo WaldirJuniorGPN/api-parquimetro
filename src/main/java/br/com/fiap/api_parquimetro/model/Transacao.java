@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transacoes")
@@ -14,9 +15,12 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class Transacao extends EntidadeBase {
 
-    @OneToOne(fetch = FetchType.EAGER)
+   // @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
+    private LocalDateTime horaDaEntrada;
+    private LocalDateTime horaDaSaida;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parquimetro_id")

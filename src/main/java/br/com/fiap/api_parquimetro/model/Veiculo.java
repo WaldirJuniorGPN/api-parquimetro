@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "veiculos")
@@ -17,14 +18,13 @@ public class Veiculo extends EntidadeBase {
     private String placaDoVeiculo;
     private String modelo;
     private String cor;
-    //TODO: remover o atributo horaDaEntrada do Veiculo e colocar na Transacao, poderia ser o inputDate
-    private LocalDateTime horaDaEntrada;
-    //TODO: remover o atributo horaDaEntrada do Veiculo e colocar na Transacao
-    private LocalDateTime horaDaSaida;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "motorista_id")
     private Motorista motorista;
+
+    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transacao> transacao;
 
 
 }

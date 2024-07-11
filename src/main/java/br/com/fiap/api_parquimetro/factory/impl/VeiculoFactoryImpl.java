@@ -24,7 +24,6 @@ public class VeiculoFactoryImpl implements EntityFactory<Veiculo, VeiculoRequest
         veiculo.setPlacaDoVeiculo(dto.placaDoVeiculo());
         veiculo.setModelo(dto.modelo());
         veiculo.setCor(dto.cor());
-        veiculo.setHoraDaEntrada(dto.horaDaEntrada());
         veiculo.setMotorista(this.buscarMotoristaNoBanco(dto.idMotorista()));
         return veiculo;
     }

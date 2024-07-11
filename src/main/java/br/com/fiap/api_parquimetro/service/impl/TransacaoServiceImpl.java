@@ -37,10 +37,10 @@ public class TransacaoServiceImpl implements TransacaoService {
         var transacao = new Transacao();
         var veiculo = this.veiculoService.buscarVeiculo(dto.veiculoId());
         var parquimetro = this.parquimetroService.buscarParquimetro(dto.parquimetroId());
-        this.veiculoService.registrarEntrada(veiculo);
         this.parquimetroService.ocuparParquimetro(parquimetro);
         transacao.setVeiculo(veiculo);
         transacao.setParquimetro(parquimetro);
+        transacao.setHoraDaEntrada(dto.horaDaEntrada());
         this.salvarNoBanco(transacao);
         log.debug("Entrada registrada para o veículo ID: {}", dto.veiculoId());
         return ResponseEntity.ok(new TransacaoIniciadaResponseDto(transacao));
@@ -50,12 +50,11 @@ public class TransacaoServiceImpl implements TransacaoService {
     public ResponseEntity<TransacaoFinalizadaResponseDto> registrarSaida(Long id) {
         var dataHoraSaida = LocalDateTime.now();
         var transacao = this.buscarTransacao(id);
-        var veiculo = transacao.getVeiculo();
         var parquimetro = transacao.getParquimetro();
-        var valorPago = this.pagamentoService.calcularValor(veiculo.getHoraDaEntrada(), dataHoraSaida, parquimetro.getCalculadora());
+        var valorPago = this.pagamentoService.calcularValor(transacao.getHoraDaEntrada(), dataHoraSaida, parquimetro.getCalculadora());
         this.pagamentoService.processar(transacao, valorPago);
         this.parquimetroService.liberarParquimetro(parquimetro);
-        this.veiculoService.registrarSaida(veiculo, dataHoraSaida);
+        transacao.setHoraDaSaida(dataHoraSaida);
         this.salvarNoBanco(transacao);
         log.debug("Saída registrada para a transação ID: {}", id);
         return ResponseEntity.ok(new TransacaoFinalizadaResponseDto(transacao));
