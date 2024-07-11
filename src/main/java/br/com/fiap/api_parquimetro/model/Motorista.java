@@ -21,6 +21,7 @@ public class Motorista extends EntidadeBase {
     private String cnh;
     private String nome;
     private String telefone;
+    private String email;
 
     @OneToMany(mappedBy = "motorista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Veiculo> veiculos = new ArrayList<>();
