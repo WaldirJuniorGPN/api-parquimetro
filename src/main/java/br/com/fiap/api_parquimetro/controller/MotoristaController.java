@@ -22,8 +22,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@RequestMapping("/motorista")
 @RestController
+@RequestMapping("/motorista")
 @RequiredArgsConstructor
 public class MotoristaController {
 

@@ -2,6 +2,7 @@ spring:
   application:
     name: parquimetro.app
 
+
   profiles:
     active: "local"
 
@@ -15,3 +16,4 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
       format_sql: false
+
