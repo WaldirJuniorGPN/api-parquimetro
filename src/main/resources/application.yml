@@ -1,19 +1,18 @@
 spring:
   application:
     name: parquimetro.app
-
   profiles:
     active: "local"
-
   datasource:
-    url: jdbc:postgresql://${DB_HOST}/${DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-
+    url: jdbc:postgresql://${POSTGRES_URL}/parquimetro
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
-      ddl-auto: update
+      ddl-auto: create-drop
       format_sql: false
 
       spring:

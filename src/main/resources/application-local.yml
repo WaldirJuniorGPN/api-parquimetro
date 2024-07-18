@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/parquimetro
-    username: user
-    password: admin
+    username: postgres
+    password: postgres
 
   jpa:
     hibernate:
