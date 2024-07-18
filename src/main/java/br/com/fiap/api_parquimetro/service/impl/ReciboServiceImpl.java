@@ -6,7 +6,7 @@ import br.com.fiap.api_parquimetro.service.ReciboService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReceboServiceImpl implements ReciboService {
+public class ReciboServiceImpl implements ReciboService {
     @Override
     public Recibo gerarRecibo(Transacao transacao) {
         Recibo recibo = new Recibo();
