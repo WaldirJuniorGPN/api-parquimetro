@@ -5,13 +5,11 @@ import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceExceptio
 import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
 import br.com.fiap.api_parquimetro.model.Status;
-import br.com.fiap.api_parquimetro.model.Tarifa;
 import br.com.fiap.api_parquimetro.model.dto.request.ParquimetroRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
 import br.com.fiap.api_parquimetro.repository.ParquimetroRepository;
 import br.com.fiap.api_parquimetro.service.ParquimetroService;
-import br.com.fiap.api_parquimetro.service.TarifaService;
 import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,22 +19,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.isNull;
-
 @Service
 @RequiredArgsConstructor
 public class ParquimetroServiceImpl implements ParquimetroService {
 
     private final ParquimetroRepository parquimetroRepository;
-    private final TarifaService tarifaService;
     private final EntityFactory<Parquimetro, ParquimetroRequestDto> factory;
 
     @Override
     @Transactional
     public ParquimetroResponseDto cadastrar(ParquimetroRequestDto dto) {
         var parquimetro = this.factory.criar(dto);
-        var calculadora = this.buscarCalculadora(dto.calculadoraId());
-        parquimetro.setTarifa(calculadora);
         this.salvarNoBanco(parquimetro);
         return new ParquimetroResponseDto(parquimetro);
     }
@@ -101,15 +94,6 @@ public class ParquimetroServiceImpl implements ParquimetroService {
 
     private Parquimetro buscarNoBanco(Long id) {
         return this.parquimetroRepository.findByIdAndAtivoTrue(id).orElseThrow(() -> new ControllerNotFoundException(ConstantesUtils.PARQUIMETRO_NAO_ENCONTRADO));
-    }
-
-    private Tarifa buscarCalculadora(Long id) {
-        var calculadoraResponse = tarifaService.buscarPorId(id);
-        if(isNull(calculadoraResponse)) {
-            throw new ControllerNotFoundException(ConstantesUtils.TARIFA_NAO_ENCONTRADA);
-        }
-
-        return new Tarifa(calculadoraResponse.id());
     }
 
     private Page<ParquimetroResponseDto> buscarPorParquimetro(Pageable pageable) {

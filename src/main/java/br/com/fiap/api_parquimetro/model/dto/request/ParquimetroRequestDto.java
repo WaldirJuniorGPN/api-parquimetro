@@ -10,6 +10,6 @@ public record ParquimetroRequestDto(
         @Valid
         StatusRequestDto status,
         @NotNull
-        Long calculadoraId
+        Long tarifaId
 ) {
 }

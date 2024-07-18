@@ -13,7 +13,7 @@ public class TarifaFactory implements EntityFactory<Tarifa, TarifaRequestDto> {
     @Override
     public Tarifa criar(TarifaRequestDto dto) {
         var tarifa = new Tarifa();
-        tarifa.setTarifaPorHora(dto.tarifaPorHora());
+        tarifa.setTarifaFlexivelPorHora(dto.tarifaFlexivelPorHora());
         tarifa.setTarifaAdicional(dto.tarifaAdicional());
         tarifa.setTarifaFixaPorHora(dto.tarifaFixaPorHora());
         return tarifa;
@@ -21,8 +21,8 @@ public class TarifaFactory implements EntityFactory<Tarifa, TarifaRequestDto> {
 
     @Override
     public void atualizar(Tarifa tarifa, TarifaRequestDto dto) {
-        if (!tarifa.getTarifaPorHora().equals(dto.tarifaPorHora())) {
-            tarifa.setTarifaPorHora(dto.tarifaPorHora());
+        if (!tarifa.getTarifaFlexivelPorHora().equals(dto.tarifaFlexivelPorHora())) {
+            tarifa.setTarifaFlexivelPorHora(dto.tarifaFlexivelPorHora());
         }
         if (!tarifa.getTarifaAdicional().equals(dto.tarifaAdicional())) {
             tarifa.setTarifaAdicional(dto.tarifaAdicional());

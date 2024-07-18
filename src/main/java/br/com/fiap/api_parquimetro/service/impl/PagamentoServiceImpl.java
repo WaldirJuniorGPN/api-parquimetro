@@ -25,7 +25,7 @@ public class PagamentoServiceImpl implements PagamentoService {
     public BigDecimal calcularValorFlexivel(LocalDateTime horaEntrada, LocalDateTime horaSaida, Tarifa tarifa) {
         var duracao = Duration.between(horaEntrada, horaSaida);
         var horas = duracao.toHours();
-        var valorTotal = tarifa.getTarifaPorHora().multiply(BigDecimal.valueOf(horas));
+        var valorTotal = tarifa.getTarifaFlexivelPorHora().multiply(BigDecimal.valueOf(horas));
         var minutosExcedentes = duracao.toMinutes() % 60;
 
         if (minutosExcedentes > 0) {

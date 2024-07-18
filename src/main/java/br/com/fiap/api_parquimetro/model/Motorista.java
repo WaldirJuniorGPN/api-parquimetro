@@ -1,9 +1,6 @@
 package br.com.fiap.api_parquimetro.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,9 +15,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Motorista extends EntidadeBase {
 
+    @Column(unique = true)
     private String cnh;
     private String nome;
     private String telefone;
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "motorista", cascade = CascadeType.ALL, orphanRemoval = true)

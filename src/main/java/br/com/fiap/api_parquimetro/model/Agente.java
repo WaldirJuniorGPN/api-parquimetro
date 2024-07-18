@@ -14,6 +14,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 public class Agente extends EntidadeBase {
 
+    @Column(unique = true)
     private String matricula;
     private String nome;
     @Column(name = "area_de_atuacao")

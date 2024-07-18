@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public record TarifaRequestDto(
         @NotNull
         @DecimalMin(value = "0.00")
-        BigDecimal tarifaPorHora,
+        BigDecimal tarifaFlexivelPorHora,
         @NotNull
         @DecimalMin(value = "0.00")
         BigDecimal tarifaAdicional,

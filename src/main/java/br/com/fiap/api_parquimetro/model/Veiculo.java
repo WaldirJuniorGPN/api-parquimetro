@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class Veiculo extends EntidadeBase {
 
-    @Column(name = "placa_veiculo")
+    @Column(name = "placa_veiculo", unique = true)
     private String placaDoVeiculo;
     private String modelo;
     private String cor;

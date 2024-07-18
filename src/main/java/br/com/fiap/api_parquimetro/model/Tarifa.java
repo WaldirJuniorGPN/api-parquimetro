@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class Tarifa extends EntidadeBase {
 
-    @Column(name = "tarifa_por_hora")
-    private BigDecimal tarifaPorHora;
+    @Column(name = "tarifa_flexivel_por_hora")
+    private BigDecimal tarifaFlexivelPorHora;
     @Column(name = "tarifa_adicional")
     private BigDecimal tarifaAdicional;
     @Column(name = "tarifa_fixa_por_hora")
