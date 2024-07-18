@@ -21,8 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@RequestMapping("/agentes")
 @RestController
+@RequestMapping("/agente")
 @RequiredArgsConstructor
 public class AgenteController {
 
