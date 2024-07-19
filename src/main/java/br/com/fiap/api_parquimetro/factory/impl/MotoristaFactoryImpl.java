@@ -16,6 +16,7 @@ public class MotoristaFactoryImpl implements EntityFactory<Motorista, MotoristaR
         motorista.setCnh(dto.cnh());
         motorista.setNome(dto.nome());
         motorista.setTelefone(dto.telefone());
+        motorista.setEmail(dto.email());
         return motorista;
     }
 
@@ -29,6 +30,9 @@ public class MotoristaFactoryImpl implements EntityFactory<Motorista, MotoristaR
         }
         if (!motorista.getTelefone().equals(dto.telefone())) {
             motorista.setTelefone(dto.telefone());
+        }
+        if (!motorista.getEmail().equals(dto.email())) {
+            motorista.setEmail(dto.email());
         }
     }
 }

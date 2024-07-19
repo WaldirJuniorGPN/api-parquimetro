@@ -1,5 +1,6 @@
 package br.com.fiap.api_parquimetro.exception;
 
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(ControllerNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(ControllerNotFoundException exception, HttpServletRequest request) {
-        return this.atribuirError(exception, HttpStatus.NOT_FOUND, "Entity not found", request);
+        return this.atribuirError(exception, HttpStatus.NOT_FOUND, ConstantesUtils.ENTITY_NOT_FOUND, request);
     }
 
     @ExceptionHandler(PropertyReferenceException.class)
     public ResponseEntity<StandardError> propertyReferenceException(PropertyReferenceException exception, HttpServletRequest request) {
-        return this.atribuirError(exception, HttpStatus.BAD_REQUEST, "Property reference invalid", request);
+        return this.atribuirError(exception, HttpStatus.BAD_REQUEST, ConstantesUtils.PROPERTY_REFERENCE_INVALID, request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,7 +33,7 @@ public class ControllerExceptionHandler {
         var status = HttpStatus.BAD_REQUEST;
         validateError.setTimestamp(Instant.now());
         validateError.setStatus(status.value());
-        validateError.setError("Erro de Validação");
+        validateError.setError(ConstantesUtils.ERRO_VALIDACAO);
         validateError.setMessage(exception.getMessage());
         validateError.setPath(request.getRequestURI());
 

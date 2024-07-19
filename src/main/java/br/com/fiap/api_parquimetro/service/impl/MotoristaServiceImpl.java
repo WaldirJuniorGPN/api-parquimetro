@@ -8,13 +8,13 @@ import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
 import br.com.fiap.api_parquimetro.repository.MotoristaRepository;
 import br.com.fiap.api_parquimetro.service.MotoristaService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -25,31 +25,29 @@ public class MotoristaServiceImpl implements MotoristaService {
 
     @Override
     @Transactional
-    public ResponseEntity<MotoristaResponseDto> cadastrar(MotoristaRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
+    public MotoristaResponseDto cadastrar(MotoristaRequestDto dto) {
         var motorista = this.factory.criar(dto);
-        var uri = uriComponentsBuilder.path("/motorista/{id}").buildAndExpand(motorista.getId()).toUri();
         this.repository.save(motorista);
-        return ResponseEntity.created(uri).body(new MotoristaResponseDto(motorista));
+        return new MotoristaResponseDto(motorista);
     }
 
     @Override
-    public ResponseEntity<Page<MotoristaResponseDto>> buscarTodos(Pageable pageable) {
-        var page = this.repository.findAllByAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException).map(MotoristaResponseDto::new);
-        return ResponseEntity.ok(page);
+    public Page<MotoristaResponseDto> buscarTodos(Pageable pageable) {
+        return this.repository.findAllByAtivoTrue(pageable).orElseThrow(this::throwPropertyReferenceException).map(MotoristaResponseDto::new);
     }
 
     @Override
-    public ResponseEntity<MotoristaResponseDto> buscarPorId(Long id) {
+    public MotoristaResponseDto buscarPorId(Long id) {
         var motorista = this.buscarNoBanco(id);
-        return ResponseEntity.ok(new MotoristaResponseDto(motorista));
+        return new MotoristaResponseDto(motorista);
     }
 
     @Override
-    public ResponseEntity<MotoristaResponseDto> atualizar(Long idMotorista, MotoristaRequestDto dto) {
+    public MotoristaResponseDto atualizar(Long idMotorista, MotoristaRequestDto dto) {
         var motorista = this.buscarNoBanco(idMotorista);
         this.factory.atualizar(motorista, dto);
         this.repository.save(motorista);
-        return ResponseEntity.ok(new MotoristaResponseDto(motorista));
+        return new MotoristaResponseDto(motorista);
     }
 
     @Override
@@ -65,10 +63,10 @@ public class MotoristaServiceImpl implements MotoristaService {
     }
 
     private ControllerNotFoundException throwMotoristaNotFoundException() {
-        return new ControllerNotFoundException("Motorista não encontrado");
+        return new ControllerNotFoundException(ConstantesUtils.MOTORISTA_NAO_ENCONTRADO);
     }
 
     private ControllerPropertyReferenceException throwPropertyReferenceException() {
-        return new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados");
+        return new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS);
     }
 }

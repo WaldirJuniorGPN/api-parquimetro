@@ -22,8 +22,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@RequestMapping("/motorista")
 @RestController
+@RequestMapping("/motorista")
 @RequiredArgsConstructor
 public class MotoristaController {
 
@@ -31,23 +31,32 @@ public class MotoristaController {
 
     @PostMapping
     public ResponseEntity<MotoristaResponseDto> cadastrar(@Valid @RequestBody MotoristaRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
-        return this.service.cadastrar(dto, uriComponentsBuilder);
+        var motoristaResponseDto = this.service.cadastrar(dto);
+        var uri = uriComponentsBuilder.path("/motoristas/{id}").buildAndExpand(motoristaResponseDto.id()).toUri();
+
+        return ResponseEntity.created(uri).body(motoristaResponseDto);
     }
 
     @GetMapping
     public ResponseEntity<Page<MotoristaResponseDto>> buscarTodos(Pageable pageable) {
-        return this.service.buscarTodos(pageable);
+        var motoristaResponseDtos = this.service.buscarTodos(pageable);
+
+        return ResponseEntity.ok(motoristaResponseDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MotoristaResponseDto> buscarPorId(@PathVariable Long id) {
-        return this.service.buscarPorId(id);
+        var motoristaResponseDto = this.service.buscarPorId(id);
+
+        return ResponseEntity.ok(motoristaResponseDto);
     }
 
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<MotoristaResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody MotoristaRequestDto dto) {
-        return this.service.atualizar(id, dto);
+        var motoristaResponseDto = this.service.atualizar(id, dto);
+
+        return ResponseEntity.ok(motoristaResponseDto);
     }
 
     @DeleteMapping("/{id}")

@@ -8,6 +8,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
 import br.com.fiap.api_parquimetro.repository.AgenteRepository;
 import br.com.fiap.api_parquimetro.service.AgenteService;
+import br.com.fiap.api_parquimetro.utils.ConstantesUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -65,10 +66,10 @@ public class AgenteServiceImpl implements AgenteService {
     }
 
     private ControllerNotFoundException throwAgenteNotFoundException() {
-        return new ControllerNotFoundException("Agente não encontrado");
+        return new ControllerNotFoundException(ConstantesUtils.AGENTE_NAO_ENCONTRADO);
     }
 
     private ControllerPropertyReferenceException throwPropertyReferenceException() {
-        return new ControllerPropertyReferenceException("Parâmetros do JSON estão inadequados");
+        return new ControllerPropertyReferenceException(ConstantesUtils.PARAMETROS_JSON_INCORRETOS);
     }
 }

@@ -3,8 +3,8 @@ package br.com.fiap.api_parquimetro.model.dto.response;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
 import br.com.fiap.api_parquimetro.model.Status;
 
-public record ParquimetroResponseDto(Long id, String localizacao, Status status) {
+public record ParquimetroResponseDto(Long id, String localizacao, Status status, Long tarifaId) {
     public ParquimetroResponseDto(Parquimetro parquimetro) {
-        this(parquimetro.getId(), parquimetro.getLocalizacao(), parquimetro.getStatus());
+        this(parquimetro.getId(), parquimetro.getLocalizacao(), parquimetro.getStatus(), parquimetro.getTarifa().getId());
     }
 }
