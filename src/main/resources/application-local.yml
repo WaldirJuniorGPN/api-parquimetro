@@ -3,7 +3,21 @@ spring:
     url: jdbc:postgresql://localhost:5432/parquimetro
     username: postgres
     password: postgres
-
   jpa:
     hibernate:
       format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: postechchallenge@gmail.com
+    password: Parquimetro@@
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+server:
+  port: 8088
