@@ -18,6 +18,6 @@ public class Parquimetro extends EntidadeBase{
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calculadora_id")
-    private Calculadora calculadora;
+    @JoinColumn(name = "tarifa_id")
+    private Tarifa tarifa;
 }

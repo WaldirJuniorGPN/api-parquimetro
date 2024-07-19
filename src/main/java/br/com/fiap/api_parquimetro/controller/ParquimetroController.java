@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/parquimetro")
+@RequestMapping("/parquimetros")
 @RequiredArgsConstructor
 public class ParquimetroController {
 
@@ -32,27 +32,38 @@ public class ParquimetroController {
 
     @PostMapping
     public ResponseEntity<ParquimetroResponseDto> cadastrar(@Valid @RequestBody ParquimetroRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
-        return this.service.cadastrar(dto, uriComponentsBuilder);
+        var parquimetroResponseDto = this.service.cadastrar(dto);
+        var uri = uriComponentsBuilder.path("/parquimetros/{id}").buildAndExpand(parquimetroResponseDto.id()).toUri();
+
+        return ResponseEntity.created(uri).body(parquimetroResponseDto);
     }
 
     @GetMapping
     public ResponseEntity<Page<ParquimetroResponseDto>> buscarTodos(Pageable pageable) {
-        return this.service.buscarTodos(pageable);
+        var parquimetroResponseDtos = this.service.buscarTodos(pageable);
+
+        return ResponseEntity.ok(parquimetroResponseDtos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ParquimetroResponseDto> buscarPorId(@PathVariable Long id) {
-        return this.service.buscarPorId(id);
+        var parquimetroResponseDto = this.service.buscarPorId(id);
+
+        return ResponseEntity.ok(parquimetroResponseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ParquimetroResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody ParquimetroRequestDto dto) {
-        return this.service.atualzar(id, dto);
+        var parquimetroResponseDto = this.service.atualzar(id, dto);
+
+        return ResponseEntity.ok(parquimetroResponseDto);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ParquimetroResponseDto> alterarStatus(@PathVariable Long id, @Valid @RequestBody StatusRequestDto statusRequestDto) {
-        return this.service.alterarStatus(id, statusRequestDto);
+        var parquimetroResponseDto = this.service.alterarStatus(id, statusRequestDto);
+
+        return ResponseEntity.ok(parquimetroResponseDto);
     }
 
     @DeleteMapping("/{id}")
