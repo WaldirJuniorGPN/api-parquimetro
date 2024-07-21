@@ -3,6 +3,9 @@ package br.com.fiap.api_parquimetro.controller;
 import br.com.fiap.api_parquimetro.model.dto.request.AgenteRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.AgenteResponseDto;
 import br.com.fiap.api_parquimetro.service.AgenteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,9 @@ public class AgenteController {
 
     private final AgenteService service;
 
+
+
+    @Operation(summary = "Cadastrar agente", description = "Esta rota cadastra novos agentes.")
     @PostMapping
     public ResponseEntity<AgenteResponseDto> cadastrar(@Valid @RequestBody AgenteRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var agenteResponseDto = this.service.cadastrar(dto);
@@ -36,6 +42,7 @@ public class AgenteController {
         return ResponseEntity.created(uri).body(agenteResponseDto);
     }
 
+    @Operation(summary="Buscar agentes cadastrados", description = "Esta rota retorna, de forma paginada, todos os agentes cadastrados")
     @GetMapping
     public ResponseEntity<Page<AgenteResponseDto>> buscarTodos(Pageable pageable) {
         var agenteResponseDtos = this.service.buscarTodos(pageable);
@@ -43,6 +50,7 @@ public class AgenteController {
         return ResponseEntity.ok(agenteResponseDtos);
     }
 
+    @Operation(summary = "Buscar agente", description = "Esta rota busca um agente específico a partir do id informado")
     @GetMapping("/{id}")
     public ResponseEntity<AgenteResponseDto> buscarPorId(@PathVariable Long id) {
         var agenteResponseDto = this.service.buscarPorId(id);
@@ -50,6 +58,7 @@ public class AgenteController {
         return ResponseEntity.ok(agenteResponseDto);
     }
 
+    @Operation(summary = "Atualizar informações de agente", description = "Esta rota atualiza as informações de um agente específico a partir do id informado")
     @PutMapping("/{id}")
     public ResponseEntity<AgenteResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody AgenteRequestDto dto) {
         var agenteResponseDto = this.service.atualizar(id, dto);
@@ -57,6 +66,7 @@ public class AgenteController {
         return ResponseEntity.ok(agenteResponseDto);
     }
 
+    @Operation(summary="Deleta um agente", description = "Esta rota deleta um agente específico a partir do id informado")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void deletar(@PathVariable Long id) {
