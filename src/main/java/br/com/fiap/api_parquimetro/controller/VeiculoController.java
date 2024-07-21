@@ -3,6 +3,7 @@ package br.com.fiap.api_parquimetro.controller;
 import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
 import br.com.fiap.api_parquimetro.service.VeiculoService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class VeiculoController {
 
     private final VeiculoService service;
 
+    @Operation(summary = "Cadastrar veículo", description = "Esta rota é responsável pelo cadastro de veículos.")
     @PostMapping
     public ResponseEntity<VeiculoResponseDto> cadastrar(@Valid @RequestBody VeiculoRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var veiculoResponseDto = this.service.cadastrar(dto);
@@ -36,6 +38,7 @@ public class VeiculoController {
         return ResponseEntity.created(uri).body(veiculoResponseDto);
     }
 
+    @Operation(summary = "Buscar veículos cadastrados", description = "Esta rota retorna, de forma paginada, todos os veículos cadastrados")
     @GetMapping
     public ResponseEntity<Page<VeiculoResponseDto>> buscarTodos(Pageable pageable) {
         var veiculoRsponseDtos = this.service.buscarTodos(pageable);
@@ -43,6 +46,7 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculoRsponseDtos);
     }
 
+    @Operation(summary = "Buscar veículo", description = "Esta rota busca um veículo específico a partir do id informado")
     @GetMapping("/{id}")
     public ResponseEntity<VeiculoResponseDto> buscarPorId(@PathVariable Long id) {
         var veiculoResponseDto = this.service.buscarPorId(id);
@@ -50,6 +54,7 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculoResponseDto);
     }
 
+    @Operation(summary = "Atualizar informações de veículo", description = "Esta rota atualiza as informações de um veículo específico a partir do id informado")
     @PutMapping("/{id}")
     public ResponseEntity<VeiculoResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody VeiculoRequestDto dto) {
         var veiculoResponseDto = this.service.atualizar(id, dto);
@@ -57,6 +62,7 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculoResponseDto);
     }
 
+    @Operation(summary = "Deletar veículo", description = "Esta rota deleta um veículo específico a partir do id informado")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void deletar(@PathVariable Long id) {
