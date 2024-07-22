@@ -125,12 +125,9 @@ public class TransacaoServiceImpl implements TransacaoService {
             var duracaoAtual = Duration.between(horaDaEntrada, dataHoraSaida);
 
             if (duracaoAtual.toHours() > duracaoEstabelecida.toHours()) {
-                var valorPago = this.pagamentoService.calcularValorFixo(horaDaEntrada, (int) duracaoEstabelecida.toHours(), parquimetro.getTarifa());
-                valorPago = this.pagamentoService.calcularTarifaAdicional(valorPago, horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getTarifa());
+               var valorAdicional = this.pagamentoService.calcularTarifaAdicional(horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getTarifa());
                 transacao.setTempoEstacionado(duracaoAtual);
-                this.pagamentoService.processarPagamento(transacao, valorPago);
-            } else {
-                transacao.setTempoEstacionado(duracaoAtual);
+                this.pagamentoService.processarPagamento(transacao, valorAdicional);
             }
         }
     }

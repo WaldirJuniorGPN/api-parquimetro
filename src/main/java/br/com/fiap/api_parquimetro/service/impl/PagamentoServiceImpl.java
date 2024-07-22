@@ -29,7 +29,7 @@ public class PagamentoServiceImpl implements PagamentoService {
         var minutosExcedentes = duracao.toMinutes() % 60;
 
         if (minutosExcedentes > 0) {
-            valorTotal = this.calcularTarifaAdicional(valorTotal, horaEntrada, horas, tarifa);
+            valorTotal = this.calcularTarifaAdicional(horaEntrada, horas, tarifa);
         }
 
         return valorTotal;
@@ -41,10 +41,9 @@ public class PagamentoServiceImpl implements PagamentoService {
     }
 
     @Override
-    public BigDecimal calcularTarifaAdicional(BigDecimal valorAPagar, LocalDateTime horaDaEntrada, long duracao, Tarifa tarifa) {
+    public BigDecimal calcularTarifaAdicional(LocalDateTime horaDaEntrada, long duracao, Tarifa tarifa) {
         var duracaoExcedente = Duration.between(horaDaEntrada.plusHours(duracao), LocalDateTime.now());
         var minutosExcedentes = duracaoExcedente.toMinutes();
-        var tarifaAdicional = tarifa.getTarifaAdicional().multiply(BigDecimal.valueOf(minutosExcedentes));
-        return valorAPagar.add(tarifaAdicional);
+        return tarifa.getTarifaAdicional().multiply(BigDecimal.valueOf(minutosExcedentes));
     }
 }
