@@ -29,7 +29,7 @@ public class PagamentoServiceImpl implements PagamentoService {
         var minutosExcedentes = duracao.toMinutes() % 60;
 
         if (minutosExcedentes > 0) {
-            valorTotal = this.calcularTarifaAdicional(horaEntrada, horas, tarifa);
+            valorTotal = valorTotal.add(this.calcularTarifaAdicional(horaEntrada, horas, tarifa));
         }
 
         return valorTotal;
