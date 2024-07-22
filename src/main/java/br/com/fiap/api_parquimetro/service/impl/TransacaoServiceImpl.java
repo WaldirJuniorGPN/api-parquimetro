@@ -49,10 +49,9 @@ public class TransacaoServiceImpl implements TransacaoService {
     public TransacaoFinalizadaResponseDto finalizarTransacao(Long id) {
         var transacao = this.buscarTransacao(id);
         transacao.setHoraDaSaida(LocalDateTime.now());
-        var veiculo = transacao.getVeiculo();
         var parquimetro = transacao.getParquimetro();
 
-        processarSaida(transacao, veiculo, parquimetro, transacao.getHoraDaSaida());
+        processarSaida(transacao, parquimetro, transacao.getHoraDaSaida());
 
         this.parquimetroService.liberarParquimetro(parquimetro);
         this.salvarNoBanco(transacao);
@@ -114,7 +113,7 @@ public class TransacaoServiceImpl implements TransacaoService {
         return new TransacaoIniciadaResponseDto(transacao);
     }
 
-    private void processarSaida(Transacao transacao, Veiculo veiculo, Parquimetro parquimetro, LocalDateTime dataHoraSaida) {
+    private void processarSaida(Transacao transacao, Parquimetro parquimetro, LocalDateTime dataHoraSaida) {
         if (transacao.getTipo() == TipoTransacao.TEMPO_FLEXIVEL) {
             var valorPago = this.pagamentoService.calcularValorFlexivel(transacao.getInputDate(), dataHoraSaida, parquimetro.getTarifa());
             transacao.setTempoEstacionado(Duration.between(transacao.getInputDate(), dataHoraSaida));
