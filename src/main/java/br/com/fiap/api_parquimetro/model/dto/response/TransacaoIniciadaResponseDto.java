@@ -1,6 +1,6 @@
 package br.com.fiap.api_parquimetro.model.dto.response;
 
-import br.com.fiap.api_parquimetro.model.TipoTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.model.Transacao;
 
 import java.time.LocalDateTime;

@@ -3,6 +3,9 @@ package br.com.fiap.api_parquimetro.service.impl;
 import br.com.fiap.api_parquimetro.model.*;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFixoDto;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFlexivelDto;
+import br.com.fiap.api_parquimetro.model.enums.StatusParquimetro;
+import br.com.fiap.api_parquimetro.model.enums.TipoPagamento;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.repository.TransacaoRepository;
 import br.com.fiap.api_parquimetro.service.*;
 import org.junit.jupiter.api.AfterEach;
@@ -152,7 +155,7 @@ class TransacaoServiceImplTest {
 
         var parquimetro = new Parquimetro();
         parquimetro.setId(parquimetroId);
-        parquimetro.setStatus(Status.LIVRE);
+        parquimetro.setStatusParquimetro(StatusParquimetro.LIVRE);
 
         var tarifa = new Tarifa();
         tarifa.setId(tarifaId);
@@ -198,7 +201,7 @@ class TransacaoServiceImplTest {
 
         var parquimetro = new Parquimetro();
         parquimetro.setId(parquimetroId);
-        parquimetro.setStatus(Status.LIVRE);
+        parquimetro.setStatusParquimetro(StatusParquimetro.LIVRE);
 
         var tarifa = new Tarifa();
         tarifa.setId(tarifaId);

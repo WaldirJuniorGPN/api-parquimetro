@@ -1,5 +1,7 @@
 package br.com.fiap.api_parquimetro.model;
 
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,4 +44,7 @@ public class Transacao extends EntidadeBase {
 
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    @Enumerated(EnumType.STRING)
+    private StatusTransacao status = StatusTransacao.EM_ABERTO;
 }

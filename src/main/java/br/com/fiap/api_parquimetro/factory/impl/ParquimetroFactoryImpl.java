@@ -24,7 +24,7 @@ public class ParquimetroFactoryImpl implements EntityFactory<Parquimetro, Parqui
     public Parquimetro criar(ParquimetroRequestDto dto) {
         var parquimetro = new Parquimetro();
         parquimetro.setLocalizacao(dto.localizacao());
-        parquimetro.setStatus(dto.status().status());
+        parquimetro.setStatusParquimetro(dto.status().statusParquimetro());
         parquimetro.setTarifa(this.buscarTarifaNoBanco(dto.tarifaId()));
         return parquimetro;
     }
@@ -34,8 +34,8 @@ public class ParquimetroFactoryImpl implements EntityFactory<Parquimetro, Parqui
         if (!parquimetro.getLocalizacao().equals(dto.localizacao())) {
             parquimetro.setLocalizacao(dto.localizacao());
         }
-        if (!parquimetro.getStatus().equals(dto.status().status())) {
-            parquimetro.setStatus(dto.status().status());
+        if (!parquimetro.getStatusParquimetro().equals(dto.status().statusParquimetro())) {
+            parquimetro.setStatusParquimetro(dto.status().statusParquimetro());
         }
         if (!parquimetro.getTarifa().getId().equals(dto.tarifaId())) {
             parquimetro.setTarifa(this.buscarTarifaNoBanco(dto.tarifaId()));

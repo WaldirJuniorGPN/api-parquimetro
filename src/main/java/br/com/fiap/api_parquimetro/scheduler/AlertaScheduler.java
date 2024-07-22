@@ -1,6 +1,7 @@
 package br.com.fiap.api_parquimetro.scheduler;
 
-import br.com.fiap.api_parquimetro.model.TipoTransacao;
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.model.Transacao;
 import br.com.fiap.api_parquimetro.repository.TransacaoRepository;
 import br.com.fiap.api_parquimetro.service.EmailService;
@@ -26,7 +27,7 @@ public class AlertaScheduler {
     public void verificarTransacoes() {
         log.debug(ConstantesUtils.VERIFICANDO_TRANSACOES_FIXAS);
 
-        List<Transacao> transacaos = transacaoRepository.findAllByPagamentoPendenteTrueAndTipo(TipoTransacao.TEMPO_FIXO);
+        List<Transacao> transacaos = transacaoRepository.findAllByTipoAndStatus(TipoTransacao.TEMPO_FIXO, StatusTransacao.EM_ABERTO);
 
         for (Transacao transacao : transacaos) {
             Duration duracaoRestante = Duration.between(LocalDateTime.now(), transacao.getInputDate().plus(transacao.getTempoEstacionado()));

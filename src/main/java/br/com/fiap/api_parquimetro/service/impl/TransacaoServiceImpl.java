@@ -3,9 +3,9 @@ package br.com.fiap.api_parquimetro.service.impl;
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
-import br.com.fiap.api_parquimetro.model.TipoTransacao;
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.model.Transacao;
-import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFixoDto;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFlexivelDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaResponseDto;
@@ -54,6 +54,7 @@ public class TransacaoServiceImpl implements TransacaoService {
         processarSaida(transacao, parquimetro, transacao.getHoraDaSaida());
 
         this.parquimetroService.liberarParquimetro(parquimetro);
+        alterarStatus(transacao);
         this.salvarNoBanco(transacao);
 
         var recibo = reciboService.gerarRecibo(transacao);
@@ -146,5 +147,9 @@ public class TransacaoServiceImpl implements TransacaoService {
 
     private void salvarNoBanco(Transacao transacao) {
         this.transacaoRepository.save(transacao);
+    }
+
+    private void alterarStatus(Transacao transacao) {
+        transacao.setStatus(StatusTransacao.FINALIZADA);
     }
 }
