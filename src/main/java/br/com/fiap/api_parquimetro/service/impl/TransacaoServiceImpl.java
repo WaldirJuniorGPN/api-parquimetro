@@ -3,9 +3,9 @@ package br.com.fiap.api_parquimetro.service.impl;
 import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
-import br.com.fiap.api_parquimetro.model.TipoTransacao;
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.model.Transacao;
-import br.com.fiap.api_parquimetro.model.Veiculo;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFixoDto;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFlexivelDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaResponseDto;
@@ -49,12 +49,12 @@ public class TransacaoServiceImpl implements TransacaoService {
     public TransacaoFinalizadaResponseDto finalizarTransacao(Long id) {
         var transacao = this.buscarTransacao(id);
         transacao.setHoraDaSaida(LocalDateTime.now());
-        var veiculo = transacao.getVeiculo();
         var parquimetro = transacao.getParquimetro();
 
-        processarSaida(transacao, veiculo, parquimetro, transacao.getHoraDaSaida());
+        processarSaida(transacao, parquimetro, transacao.getHoraDaSaida());
 
         this.parquimetroService.liberarParquimetro(parquimetro);
+        alterarStatus(transacao);
         this.salvarNoBanco(transacao);
 
         var recibo = reciboService.gerarRecibo(transacao);
@@ -114,7 +114,7 @@ public class TransacaoServiceImpl implements TransacaoService {
         return new TransacaoIniciadaResponseDto(transacao);
     }
 
-    private void processarSaida(Transacao transacao, Veiculo veiculo, Parquimetro parquimetro, LocalDateTime dataHoraSaida) {
+    private void processarSaida(Transacao transacao, Parquimetro parquimetro, LocalDateTime dataHoraSaida) {
         if (transacao.getTipo() == TipoTransacao.TEMPO_FLEXIVEL) {
             var valorPago = this.pagamentoService.calcularValorFlexivel(transacao.getInputDate(), dataHoraSaida, parquimetro.getTarifa());
             transacao.setTempoEstacionado(Duration.between(transacao.getInputDate(), dataHoraSaida));
@@ -125,12 +125,9 @@ public class TransacaoServiceImpl implements TransacaoService {
             var duracaoAtual = Duration.between(horaDaEntrada, dataHoraSaida);
 
             if (duracaoAtual.toHours() > duracaoEstabelecida.toHours()) {
-                var valorPago = this.pagamentoService.calcularValorFixo(horaDaEntrada, (int) duracaoEstabelecida.toHours(), parquimetro.getTarifa());
-                valorPago = this.pagamentoService.calcularTarifaAdicional(valorPago, horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getTarifa());
+               var valorAdicional = this.pagamentoService.calcularTarifaAdicional(horaDaEntrada, duracaoEstabelecida.toHours(), parquimetro.getTarifa());
                 transacao.setTempoEstacionado(duracaoAtual);
-                this.pagamentoService.processarPagamento(transacao, valorPago);
-            } else {
-                transacao.setTempoEstacionado(duracaoAtual);
+                this.pagamentoService.processarPagamento(transacao, valorAdicional);
             }
         }
     }
@@ -147,5 +144,9 @@ public class TransacaoServiceImpl implements TransacaoService {
 
     private void salvarNoBanco(Transacao transacao) {
         this.transacaoRepository.save(transacao);
+    }
+
+    private void alterarStatus(Transacao transacao) {
+        transacao.setStatus(StatusTransacao.FINALIZADA);
     }
 }

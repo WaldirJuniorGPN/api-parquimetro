@@ -13,5 +13,5 @@ public interface PagamentoService {
 
     BigDecimal calcularValorFixo(LocalDateTime horaDaEntrada, Integer duracao,  Tarifa tarifa);
 
-    BigDecimal calcularTarifaAdicional(BigDecimal valorAPagar, LocalDateTime horaDaEntrada, long duracao, Tarifa tarifa);
+    BigDecimal calcularTarifaAdicional(LocalDateTime horaDaEntrada, long duracao, Tarifa tarifa);
 }
