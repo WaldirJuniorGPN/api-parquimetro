@@ -5,6 +5,7 @@ spring:
     password: admin
   jpa:
     hibernate:
+      ddl-auto: none
       format_sql: true
   mail:
     host: smtp.gmail.com

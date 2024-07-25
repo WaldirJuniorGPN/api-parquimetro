@@ -11,8 +11,7 @@ spring:
     generate-ddl: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
-      format_sql: false
+      ddl-auto: none
   mail:
     host: smtp.gmail.com
     port: 587
