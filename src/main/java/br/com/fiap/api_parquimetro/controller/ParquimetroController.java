@@ -5,6 +5,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
 import br.com.fiap.api_parquimetro.service.ParquimetroService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
+@Tag(name = "Parquimetros", description = "Gerencia as operações de cadastro, atualização, busca e deleção de parquimetros.")
 @RequestMapping("/parquimetros")
 @RequiredArgsConstructor
 public class ParquimetroController {

@@ -7,6 +7,7 @@ import br.com.fiap.api_parquimetro.model.dto.response.TransacaoIniciadaResponseD
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoPagamentoPendenteResponseDto;
 import br.com.fiap.api_parquimetro.service.TransacaoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "Transações", description = "Gerencia as operações de início, finalização e busca de transações.")
 @RequestMapping("transacoes")
 @RequiredArgsConstructor
 public class TransacaoController {

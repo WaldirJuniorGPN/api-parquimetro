@@ -6,6 +6,7 @@ import br.com.fiap.api_parquimetro.service.AgenteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,13 +26,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
+@Tag(name = "Agentes", description = "Gerencia as operações de cadastro, atualização, busca e deleção de agentes.")
 @RequestMapping("/agente")
 @RequiredArgsConstructor
 public class AgenteController {
 
     private final AgenteService service;
-
-
 
     @Operation(summary = "Cadastrar agente", description = "Esta rota cadastra novos agentes.")
     @PostMapping

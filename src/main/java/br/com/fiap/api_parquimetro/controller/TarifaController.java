@@ -4,6 +4,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.TarifaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TarifaResponseDto;
 import br.com.fiap.api_parquimetro.service.TarifaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
+@Tag(name = "Tarifas", description = "Gerencia as operações de cadastro, atualização, busca e deleção de tarifas.")
 @RequestMapping("/tarifa")
 @RequiredArgsConstructor
 public class TarifaController {

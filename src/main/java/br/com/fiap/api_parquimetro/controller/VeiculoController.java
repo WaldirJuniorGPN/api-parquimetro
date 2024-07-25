@@ -4,6 +4,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.VeiculoRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.VeiculoResponseDto;
 import br.com.fiap.api_parquimetro.service.VeiculoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
+@Tag(name = "Veiculos", description = "Gerencia as operações de cadastro, atualização, busca e deleção de veículos." )
 @RestController
 @RequestMapping("/veiculo")
 @RequiredArgsConstructor

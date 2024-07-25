@@ -4,6 +4,7 @@ import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
 import br.com.fiap.api_parquimetro.service.MotoristaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
+@Tag(name = "Motoristas", description = "Gerencia as operações de cadastro, atualização, busca e deleção de motoristas.")
 @RequestMapping("/motorista")
 @RequiredArgsConstructor
 public class MotoristaController {
