@@ -24,7 +24,7 @@ public class AlertaScheduler {
 
     @Scheduled(fixedRate = 60000)
     public void verificarTransacoes() {
-        log.debug(ConstantesUtils.VERIFICANDO_TRANSACOES_FIXAS);
+        log.debug(ConstantesUtils.VERIFICANDO_TRANSACOES);
 
         var transacaos = transacaoRepository.findAllByHoraDaSaidaIsNull();
 
