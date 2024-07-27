@@ -83,7 +83,6 @@ public class ParquimetroServiceImpl implements ParquimetroService {
     }
 
     @Override
-    @Cacheable(value = "parquimetros", key = "#id")
     public Parquimetro buscarParquimetro(Long id) {
         return this.buscarNoBanco(id);
     }

@@ -22,5 +22,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findAllByPagamentoPendenteTrueAndTipo(TipoTransacao tipoTransacao);
 
-    List<Transacao> findAllByTipoAndStatus(TipoTransacao tipoTransacao, StatusTransacao statusTransacao);
+    List<Transacao> findAllByHoraDaSaidaIsNull();
+
+    List<Transacao> findByVeiculoIdAndStatus(Long veiculoId, StatusTransacao statusTransacao);
 }

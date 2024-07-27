@@ -19,7 +19,7 @@ public class Veiculo extends EntidadeBase {
     private String modelo;
     private String cor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "motorista_id")
     private Motorista motorista;
 

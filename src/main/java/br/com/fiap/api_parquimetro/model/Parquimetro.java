@@ -18,7 +18,7 @@ public class Parquimetro extends EntidadeBase{
     @Enumerated(EnumType.STRING)
     private StatusParquimetro statusParquimetro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tarifa_id")
     private Tarifa tarifa;
 }

@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public interface PagamentoService {
-    void processarPagamento(Transacao transacao, BigDecimal valorPago);
+    void processarPagamento(Transacao transacao, BigDecimal valorAPager);
 
-    BigDecimal calcularValorFlexivel(LocalDateTime horaEntrdada, LocalDateTime horaSaida, Tarifa tarifa);
+    BigDecimal calcularValorFlexivel(Transacao transacao, Tarifa tarifa);
 
     BigDecimal calcularValorFixo(LocalDateTime horaDaEntrada, Integer duracao,  Tarifa tarifa);
 

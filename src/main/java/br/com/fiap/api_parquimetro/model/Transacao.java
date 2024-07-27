@@ -29,6 +29,9 @@ public class Transacao extends EntidadeBase {
     @Column(name = "tempo_estacionado")
     private Duration tempoEstacionado;
 
+    @Column(name = "tempo_limite")
+    private LocalDateTime tempoLimite;
+
     @Column(name = "hora_da_saida")
     private LocalDateTime horaDaSaida;
 

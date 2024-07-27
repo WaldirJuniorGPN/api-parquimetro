@@ -24,4 +24,9 @@ public class ConstantesUtils {
     public static final String ASSUNTO_ALERTA_TEMPO_ESTACIONADO = "Alerta de Tempo Estacionado";
     public static final String ALERTA_ENVIADO_PARA_CONDUTOR = "Alerta enviado para o condutor do veículo {}.";
     public static final String RECIBO_GERADO = "Recibo gerado: {}";
+    public static final String PIX_NAO_SUPORTADO = "PIX não é um método de pagamento suportado para esse tipo de transação.";
+    public static final String PARQUIMETRO_INDISPONIVEL = "Parquímetro indisponível no momento. Por favor selecione outro parquímetro.";
+    public static final String ERRO_IMPRESSAO_RECIBO = "Erro ao imprimir recibo: {}";
+    public static final String TRANSACAO_FINALIZADA = "Transação já finalizada.";
+    public static final String VEICULO_JA_ESTACIONADO = "Veículo já estacionado em um parquímetro.";
 }

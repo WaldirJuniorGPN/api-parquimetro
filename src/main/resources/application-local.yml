@@ -7,13 +7,10 @@ spring:
     hibernate:
       format_sql: true
   mail:
-    host: smtp.gmail.com
-    port: 587
     username: postechchallenge@gmail.com
-    password: Parquimetro@@
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+    password: xmip tcir iyuq wbta
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    br.com.fiap.api_parquimetro: DEBUG
