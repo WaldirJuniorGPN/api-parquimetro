@@ -1,6 +1,7 @@
 package br.com.fiap.api_parquimetro.repository;
 
-import br.com.fiap.api_parquimetro.model.TipoTransacao;
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import br.com.fiap.api_parquimetro.model.Transacao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,8 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     Optional<Transacao> findByIdAndAtivoTrue(Long id);
 
     List<Transacao> findAllByPagamentoPendenteTrueAndTipo(TipoTransacao tipoTransacao);
+
+    List<Transacao> findAllByHoraDaSaidaIsNull();
+
+    List<Transacao> findByVeiculoIdAndStatus(Long veiculoId, StatusTransacao statusTransacao);
 }

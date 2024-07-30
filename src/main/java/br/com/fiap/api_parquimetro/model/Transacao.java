@@ -1,5 +1,7 @@
 package br.com.fiap.api_parquimetro.model;
 
+import br.com.fiap.api_parquimetro.model.enums.StatusTransacao;
+import br.com.fiap.api_parquimetro.model.enums.TipoTransacao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +29,9 @@ public class Transacao extends EntidadeBase {
     @Column(name = "tempo_estacionado")
     private Duration tempoEstacionado;
 
+    @Column(name = "tempo_limite")
+    private LocalDateTime tempoLimite;
+
     @Column(name = "hora_da_saida")
     private LocalDateTime horaDaSaida;
 
@@ -42,4 +47,7 @@ public class Transacao extends EntidadeBase {
 
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    @Enumerated(EnumType.STRING)
+    private StatusTransacao status = StatusTransacao.EM_ABERTO;
 }

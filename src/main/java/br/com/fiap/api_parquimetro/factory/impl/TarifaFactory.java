@@ -13,22 +13,22 @@ public class TarifaFactory implements EntityFactory<Tarifa, TarifaRequestDto> {
     @Override
     public Tarifa criar(TarifaRequestDto dto) {
         var tarifa = new Tarifa();
-        tarifa.setTarifaFlexivelPorHora(dto.tarifaFlexivelPorHora());
-        tarifa.setTarifaAdicional(dto.tarifaAdicional());
-        tarifa.setTarifaFixaPorHora(dto.tarifaFixaPorHora());
+        tarifa.setTarifaFixa(dto.tarifaFixa());
+        tarifa.setTarifaVariavelPorHora(dto.tarifaVariavelPorHora());
+        tarifa.setDuracaoFixa(dto.duracaoFixa());
         return tarifa;
     }
 
     @Override
     public void atualizar(Tarifa tarifa, TarifaRequestDto dto) {
-        if (!tarifa.getTarifaFlexivelPorHora().equals(dto.tarifaFlexivelPorHora())) {
-            tarifa.setTarifaFlexivelPorHora(dto.tarifaFlexivelPorHora());
+        if (!tarifa.getTarifaFixa().equals(dto.tarifaFixa())) {
+            tarifa.setTarifaFixa(dto.tarifaFixa());
         }
-        if (!tarifa.getTarifaAdicional().equals(dto.tarifaAdicional())) {
-            tarifa.setTarifaAdicional(dto.tarifaAdicional());
+        if (!tarifa.getTarifaVariavelPorHora().equals(dto.tarifaVariavelPorHora())) {
+            tarifa.setTarifaVariavelPorHora(dto.tarifaVariavelPorHora());
         }
-        if (!tarifa.getTarifaFixaPorHora().equals(dto.tarifaFixaPorHora())) {
-            tarifa.setTarifaFixaPorHora(dto.tarifaFixaPorHora());
+        if (tarifa.getDuracaoFixa() != dto.duracaoFixa()) {
+            tarifa.setDuracaoFixa(dto.duracaoFixa());
         }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.fiap.api_parquimetro.service;
 
+import br.com.fiap.api_parquimetro.model.Transacao;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFixoDto;
 import br.com.fiap.api_parquimetro.model.dto.request.TransacaoRequestFlexivelDto;
 import br.com.fiap.api_parquimetro.model.dto.response.TransacaoFinalizadaResponseDto;
@@ -21,4 +22,6 @@ public interface TransacaoService {
     Object buscarPorId(Long id);
 
     TransacaoIniciadaResponseDto iniciarTransacaoTempoFixo(TransacaoRequestFixoDto dto);
+
+    Transacao adicionaHoraExtra(Transacao transacao);
 }

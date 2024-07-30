@@ -1,5 +1,6 @@
 package br.com.fiap.api_parquimetro.model;
 
+import br.com.fiap.api_parquimetro.model.enums.StatusParquimetro;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,9 +16,9 @@ public class Parquimetro extends EntidadeBase{
     private String localizacao;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StatusParquimetro statusParquimetro;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tarifa_id")
     private Tarifa tarifa;
 }

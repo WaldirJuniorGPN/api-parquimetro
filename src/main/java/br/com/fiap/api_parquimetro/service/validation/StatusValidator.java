@@ -1,20 +1,20 @@
 package br.com.fiap.api_parquimetro.service.validation;
 
-import br.com.fiap.api_parquimetro.model.Status;
+import br.com.fiap.api_parquimetro.model.enums.StatusParquimetro;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class StatusValidator implements ConstraintValidator<ValidStatus, Status> {
+public class StatusValidator implements ConstraintValidator<ValidStatus, StatusParquimetro> {
 
     @Override
     public void initialize(ValidStatus constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(Status status, ConstraintValidatorContext context) {
-        if (status == null) {
+    public boolean isValid(StatusParquimetro statusParquimetro, ConstraintValidatorContext context) {
+        if (statusParquimetro == null) {
             return false;
         }
-        return status == Status.LIVRE || status == Status.MANUTENCAO;
+        return statusParquimetro == StatusParquimetro.LIVRE || statusParquimetro == StatusParquimetro.MANUTENCAO;
     }
 }

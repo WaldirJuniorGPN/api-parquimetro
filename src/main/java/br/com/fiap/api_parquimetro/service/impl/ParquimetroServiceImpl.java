@@ -4,7 +4,7 @@ import br.com.fiap.api_parquimetro.exception.ControllerNotFoundException;
 import br.com.fiap.api_parquimetro.exception.ControllerPropertyReferenceException;
 import br.com.fiap.api_parquimetro.factory.EntityFactory;
 import br.com.fiap.api_parquimetro.model.Parquimetro;
-import br.com.fiap.api_parquimetro.model.Status;
+import br.com.fiap.api_parquimetro.model.enums.StatusParquimetro;
 import br.com.fiap.api_parquimetro.model.dto.request.ParquimetroRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.request.StatusRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.ParquimetroResponseDto;
@@ -57,7 +57,7 @@ public class ParquimetroServiceImpl implements ParquimetroService {
     @Transactional
     public ParquimetroResponseDto alterarStatus(Long id, StatusRequestDto status) {
         var parquimetro = this.buscarParquimetro(id);
-        parquimetro.setStatus(status.status());
+        parquimetro.setStatusParquimetro(status.statusParquimetro());
         this.salvarNoBanco(parquimetro);
         return new ParquimetroResponseDto(parquimetro);
     }
@@ -72,18 +72,17 @@ public class ParquimetroServiceImpl implements ParquimetroService {
 
     @Override
     public void ocuparParquimetro(Parquimetro parquimetro) {
-        parquimetro.setStatus(Status.OCUPADO);
+        parquimetro.setStatusParquimetro(StatusParquimetro.OCUPADO);
         this.salvarNoBanco(parquimetro);
     }
 
     @Override
     public void liberarParquimetro(Parquimetro parquimetro) {
-        parquimetro.setStatus(Status.LIVRE);
+        parquimetro.setStatusParquimetro(StatusParquimetro.LIVRE);
         this.salvarNoBanco(parquimetro);
     }
 
     @Override
-    @Cacheable(value = "parquimetros", key = "#id")
     public Parquimetro buscarParquimetro(Long id) {
         return this.buscarNoBanco(id);
     }
