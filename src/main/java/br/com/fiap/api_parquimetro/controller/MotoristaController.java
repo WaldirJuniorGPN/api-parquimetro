@@ -3,6 +3,8 @@ package br.com.fiap.api_parquimetro.controller;
 import br.com.fiap.api_parquimetro.model.dto.request.MotoristaRequestDto;
 import br.com.fiap.api_parquimetro.model.dto.response.MotoristaResponseDto;
 import br.com.fiap.api_parquimetro.service.MotoristaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +25,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
+@Tag(name = "Motoristas", description = "Gerencia as operações de cadastro, atualização, busca e deleção de motoristas.")
 @RequestMapping("/motorista")
 @RequiredArgsConstructor
 public class MotoristaController {
 
     private final MotoristaService service;
 
+    @Operation(summary = "Cadastrar motorista", description = "Esta rota é responsável pelo cadastro de motoristas.")
     @PostMapping
     public ResponseEntity<MotoristaResponseDto> cadastrar(@Valid @RequestBody MotoristaRequestDto dto, UriComponentsBuilder uriComponentsBuilder) {
         var motoristaResponseDto = this.service.cadastrar(dto);
@@ -37,6 +41,7 @@ public class MotoristaController {
         return ResponseEntity.created(uri).body(motoristaResponseDto);
     }
 
+    @Operation(summary="Buscar motoristas cadastrados", description = "Esta rota retorna, de forma paginada, todos os motoristas cadastrados")
     @GetMapping
     public ResponseEntity<Page<MotoristaResponseDto>> buscarTodos(Pageable pageable) {
         var motoristaResponseDtos = this.service.buscarTodos(pageable);
@@ -44,6 +49,7 @@ public class MotoristaController {
         return ResponseEntity.ok(motoristaResponseDtos);
     }
 
+    @Operation(summary = "Buscar motorista", description = "Esta rota busca um motorista específico a partir do id informado")
     @GetMapping("/{id}")
     public ResponseEntity<MotoristaResponseDto> buscarPorId(@PathVariable Long id) {
         var motoristaResponseDto = this.service.buscarPorId(id);
@@ -51,6 +57,7 @@ public class MotoristaController {
         return ResponseEntity.ok(motoristaResponseDto);
     }
 
+    @Operation(summary = "Atualizar informações de motorista", description = "Esta rota atualiza as informações de um motorista específico a partir do id informado")
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<MotoristaResponseDto> atualizar(@PathVariable Long id, @Valid @RequestBody MotoristaRequestDto dto) {
@@ -59,6 +66,7 @@ public class MotoristaController {
         return ResponseEntity.ok(motoristaResponseDto);
     }
 
+    @Operation(summary="Deletar motorista", description = "Esta rota deleta um motorista específico a partir do id informado")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public void deletar(@PathVariable Long id) {
